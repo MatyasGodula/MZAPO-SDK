@@ -151,4 +151,9 @@ class DisplayDriver {
         /// @param sprite The sprite to draw, which is a struct containing the width, height and data of the sprite.
         /// @param color The color to draw the sprite with.
         void draw_sprite(int x, int y, const Sprite& sprite, Color color);
+
+        /// @brief Fills the entire screen with a specific color.
+        /// @param color The color to fill the screen with.
+        /// @note Mostly used for black but I added color specification for funsies. Might be useful in the future.
+        void fill_screen(Color color);  
 };
