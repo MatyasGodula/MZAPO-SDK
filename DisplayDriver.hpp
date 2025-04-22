@@ -1,7 +1,7 @@
 /// @file DisplayDriver.hpp
 /// @brief An abstraction layer for the display driver of the MZAPO board.
 /// @author Matyas Godula
-/// @date 24.4.2025
+/// @date 22.4.2025
 /// @note For some reason copilot has gotten really good at generating comments and docs.
 
 #pragma once
@@ -19,7 +19,7 @@ private:
     /// @param g Green component (0-255)
     /// @param b Blue component (0-255)
     /// @return RGB565 value
-    /// @note This function ins called in the constructor and is not intended to be used directly.
+    /// @note This function is called in the constructor and is not intended to be used directly.
     /// @note The conversion is done by scaling the RGB888 values to fit into the RGB565 format so detail can be lost.
     static constexpr uint16_t to565(uint8_t r, uint8_t g, uint8_t b) {
         uint16_t red = (r * 31) / 255;
