@@ -1,4 +1,5 @@
 *.o
 depend
-change_me
+space_invaders
 connect.gdb
+
