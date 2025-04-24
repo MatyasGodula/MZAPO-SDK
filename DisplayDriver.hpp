@@ -156,4 +156,9 @@ class DisplayDriver {
         /// @param color The color to fill the screen with.
         /// @note Mostly used for black but I added color specification for funsies. Might be useful in the future.
         void fill_screen(Color color);  
+
+        /// @brief Flushes the frame buffer into the display memory
+        /// @note The display orietnation in memory is different from the buffer, so I have to pay the rotation tax somewhere
+        /// so I decided that it should be paid in flush();
+        void flush();
 };
