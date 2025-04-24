@@ -15,11 +15,8 @@
 #include "Sprite.hpp"
 #include "Color.hpp"
 
-constexpr int SCREEN_WIDTH = 480;  // Screen width in pixels in landscape mode
-constexpr int SCREEN_HEIGHT = 320; // Screen height in pixels in landscape mode
-constexpr int SCREEN_SIZE = SCREEN_WIDTH * SCREEN_HEIGHT; // Total number of pixels on the screen
-constexpr int SCREEN_SIZE_BYTES = SCREEN_SIZE * sizeof(uint16_t); // Total size of the screen in bytes
-
+constexpr int MAX_WIDTH = 480;
+constexpr int MAX_HEIGHT = 480;
 
 /// @brief FontType enum for different font types.
 /// @details This enum is used to specify the font type when drawing text on the display.
@@ -30,11 +27,20 @@ enum class FontType {
     WinFreeSystem14x16,
 };
 
+enum class DisplayOrientation: uint8_t {
+    Portrait = 0x28,
+    Landcape = 0x48,
+};
+
 /// @brief DisplayDriver class for controlling the MZAPO display.
 class DisplayDriver {
     private:
-        void* lcd = map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0); // Map the physical address of the display
-        uint16_t fb[SCREEN_WIDTH][SCREEN_HEIGHT];
+        void* lcd;
+        uint16_t fb[MAX_WIDTH * MAX_HEIGHT];
+        int screen_width;
+        int screen_height;
+        DisplayOrientation orientation;
+
 
         /// @brief Given a font type, returns the corresponding font descriptor.
         /// @param font The better user accessible font type.
@@ -52,12 +58,14 @@ class DisplayDriver {
 
         /// @brief Checks whether a given pixel is within the bounds of the screen.
         bool in_bounds(int x, int y) const {
-            return (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT);
+            return (x >= 0 && x < screen_width && y >= 0 && y < screen_height);
         } 
 
     public:
         /// @brief Constructor for DisplayDriver.
-        DisplayDriver();
+        /// @param orientation The orientation of the display (Portrait or Landscape).
+        /// @throw std::runtime_error if the physical address mapping fails.
+        DisplayDriver(DisplayOrientation);
 
         /// @brief Destructor for DisplayDriver.
         ~DisplayDriver();
