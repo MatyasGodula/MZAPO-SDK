@@ -8,6 +8,11 @@
 DisplayDriver::DisplayDriver(DisplayOrientation orientation) 
     : orientation(orientation) {
 
+    lcd = map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
+    if (lcd == nullptr) {
+        throw std::runtime_error("Failed to map physical address");
+    }
+
     // Set the screen orientation through MADCTL
     parlcd_write_cmd(static_cast<uint8_t*>(lcd), 0x36);
     parlcd_write_data(static_cast<uint8_t*>(lcd), static_cast<uint8_t>(orientation));
@@ -22,12 +27,6 @@ DisplayDriver::DisplayDriver(DisplayOrientation orientation)
             screen_height = 320;
             break;
     }
-
-    lcd = map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
-    if (lcd == nullptr) {
-        throw std::runtime_error("Failed to map physical address");
-    }
-
 }
 
 DisplayDriver::~DisplayDriver() {
@@ -40,10 +39,18 @@ void DisplayDriver::draw_pixel(int x, int y, Color color) {
     }
 }
 
+void DisplayDriver::draw_pixel(int x, int y, uint16_t color) {
+    if (in_bounds(x, y)) {
+        fb[x + screen_width * y] = color;
+    }
+}
+
 void DisplayDriver::draw_rectangle(int x, int y, int width, int height, Color color) {
     for (int i = 0; i < width; ++i) {
         for (int j = 0; j < height; ++j) {
-            draw_pixel(x + i, y + j, color);
+            if (in_bounds(x + i, y + j)) {
+                draw_pixel(x + i, y + j, color);
+            }
         }
     }
 }
@@ -57,7 +64,7 @@ void DisplayDriver::draw_sprite(int x, int y, const Sprite& sprite, Color color)
     for (int i = 0; i < sprite.width; ++i) {
         for (int j = 0; j < sprite.height; ++j) {
             uint8_t pixel = sprite.data[j * sprite.width + i];
-            if (pixel != 0) { 
+            if (pixel != 0 && in_bounds(x + i, y + j)) { 
                 draw_pixel(x + i, y + j, color);
             }
         }
@@ -65,16 +72,18 @@ void DisplayDriver::draw_sprite(int x, int y, const Sprite& sprite, Color color)
 }
 
 void DisplayDriver::fill_screen(Color color) {
-    for (int i = 0; i < screen_width * screen_height; ++i) {
-        fb[i] = color.to_rgb565();
+    for (int y = 0; y < screen_height; ++y) {
+        for (int x = 0; x < screen_width; ++x) {
+            fb[x + screen_width * y] = color.to_rgb565();
+        }
     }
 }
 
 void DisplayDriver::flush() {
     parlcd_write_cmd(static_cast<uint8_t*>(lcd), 0x2C); // Write to RAM command
-    for (int i = 0; i < screen_width * screen_height; ++i) {
-        // Write the pixel data to the display
-        // fb[i] is the pixel data in RGB565 format
-        parlcd_write_data(static_cast<uint8_t*>(lcd), fb[i]);
+    for (int y = 0; y < screen_height; ++y) {
+        for (int x = 0; x < screen_width; ++x) {
+            parlcd_write_data(static_cast<uint8_t*>(lcd), fb[x + screen_width * y]);
+        }
     }
 }

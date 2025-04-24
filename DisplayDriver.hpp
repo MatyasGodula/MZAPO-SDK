@@ -78,6 +78,13 @@ class DisplayDriver {
         /// @note If out of bounds the pixel will not be set.
         void draw_pixel(int x, int y, Color color);
 
+        /// @brief Sets a pixel on the display to a specific color.
+        /// @param x X coordinate of the pixel
+        /// @param y Y coordinate of the pixel
+        /// @param color Color to set the pixel to 
+        /// @note This is an overload to draw a pixel instead of taking a Color enum it takes a raw RGB565 value.
+        void draw_pixel(int x, int y, uint16_t color);
+
         /// @brief Draws a rectangle on the display of a specific color, width and height.
         /// @param x X coordinate of the top-left corner of the rectangle
         /// @param y Y coordinate of the top-left corner of the rectangle
