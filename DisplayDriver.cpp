@@ -5,6 +5,7 @@
 #include "font_types.h"
 #include <stdexcept>
 #include <iostream>
+#include <utility>
 
 DisplayDriver::DisplayDriver(DisplayOrientation orientation) 
     : orientation(orientation) {
@@ -21,27 +22,31 @@ DisplayDriver::~DisplayDriver() {
     // No need to do anything here
 }
 
+std::pair<int, int> DisplayDriver::map_coords(int x, int y) {
+    switch (orientation) {
+        case DisplayOrientation::Landscape:
+            return {x, y}; 
+
+        case DisplayOrientation::Portrait:
+            return {y, screen_height - 1 - x};
+
+        default:
+            return {x, y};
+    }
+}
+
+
 void DisplayDriver::draw_pixel(int x, int y, Color color) {
     if (in_bounds(x, y)) {
-        if (orientation == DisplayOrientation::Landscape) {
-            fb[x + screen_width * y] = color.to_rgb565();
-        } else {
-            int src_x = y;
-            int src_y = screen_height - 1 - x;
-            fb[src_y * screen_width + src_x] = color.to_rgb565();
-        }
+        auto [mapped_x, mapped_y] = map_coords(x, y);
+        fb[mapped_y * screen_width + mapped_x] = color.to_rgb565();
     }
 }
 
 void DisplayDriver::draw_pixel(int x, int y, uint16_t color) {
     if (in_bounds(x, y)) {
-        if (orientation == DisplayOrientation::Landscape) {
-            fb[x + screen_width * y] = color;
-        } else {
-            int src_x = y;
-            int src_y = screen_height - 1 - x;
-            fb[src_y * screen_width + src_x] = color;
-        }
+        auto [mapped_x, mapped_y] = map_coords(x, y);
+        fb[mapped_y * screen_width + mapped_x] = color;
     }
 }
 
@@ -85,7 +90,7 @@ void DisplayDriver::flush() {
     //std::cout << "Flushing\n";
     for (int y = 0; y < screen_height; ++y) {
         for (int x = 0; x < screen_width; ++x) {
-            parlcd_write_data(static_cast<uint8_t*>(lcd), fb[x + screen_width * y]);
+            parlcd_write_data(static_cast<uint8_t*>(lcd), fb[y * screen_width + x]);
         }
     }
     

@@ -6,6 +6,7 @@
 
 #pragma once
 #include <cstdint>
+#include <utility>
 
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
@@ -66,6 +67,8 @@ class DisplayDriver {
                 return (y >= 0 && y < screen_width && x >= 0 && x < screen_height);
             }
         } 
+
+        std::pair<int, int> map_coords(int x, int y);
 
     public:
         /// @brief Constructor for DisplayDriver.
