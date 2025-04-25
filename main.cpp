@@ -86,13 +86,12 @@ int main(int argc, char *argv[]) {
 
 	DisplayDriver screen = DisplayDriver(DisplayOrientation::Landscape);
 
-	screen.fill_screen(Color::Magenta);
-
-	screen.draw_rectangle(100, 100, 100, 50, Color::White);
-
-	screen.flush();
-
-	
+	for (int x = 0; x < 300; ++x) {
+		screen.fill_screen(Color::Black);
+		screen.draw_rectangle(x, x, 100, 50, Color::White);
+		screen.flush();
+		clock_nanosleep(CLOCK_MONOTONIC, 0, &loop_delay, NULL);
+	}
 
 	return 0;
 }
