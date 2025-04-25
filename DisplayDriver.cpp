@@ -63,7 +63,7 @@ void DisplayDriver::draw_letter(int x, int y, FontType font, char ch) {
 void DisplayDriver::draw_sprite(int x, int y, const Sprite& sprite, Color color) {
     for (int i = 0; i < sprite.width; ++i) {
         for (int j = 0; j < sprite.height; ++j) {
-            uint8_t pixel = sprite.data[j * sprite.width + i];
+            uint8_t pixel = sprite.at(i, j);
             if (pixel != 0 && in_bounds(x + i, y + j)) { 
                 draw_pixel(x + i, y + j, color);
             }

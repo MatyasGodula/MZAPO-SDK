@@ -1,9 +1,11 @@
+#pragma once
 #include <cstdint>
-
-#include "DisplayDriver.hpp" // Include the DisplayDriver header for the Color class
 
 struct Sprite {
     int width;
     int height;
-    uint8_t *data;
+    
+    virtual uint8_t at(int x, int y) const = 0;
+
+    virtual ~Sprite() = default;
 };
