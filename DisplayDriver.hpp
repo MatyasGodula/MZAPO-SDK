@@ -13,8 +13,9 @@
 #include "mzapo_regs.h"
 
 #include "font_types.h"
-#include "Sprite.hpp"
 #include "Color.hpp"
+
+#include "Sprite.hpp"
 
 constexpr int SCREEN_WIDTH = 480;
 constexpr int SCREEN_HEIGHT = 320;
