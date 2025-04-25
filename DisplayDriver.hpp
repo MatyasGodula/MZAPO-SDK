@@ -15,8 +15,8 @@
 #include "Sprite.hpp"
 #include "Color.hpp"
 
-constexpr int MAX_WIDTH = 480;
-constexpr int MAX_HEIGHT = 480;
+constexpr int SCREEN_WIDTH = 480;
+constexpr int SCREEN_HEIGHT = 320;
 
 /// @brief FontType enum for different font types.
 /// @details This enum is used to specify the font type when drawing text on the display.
@@ -28,17 +28,17 @@ enum class FontType {
 };
 
 enum class DisplayOrientation: uint8_t {
-    Portrait = 0x28,
-    Landcape = 0x48,
+    Portrait,
+    Landscape,
 };
 
 /// @brief DisplayDriver class for controlling the MZAPO display.
 class DisplayDriver {
     private:
         void* lcd;
-        uint16_t fb[MAX_WIDTH * MAX_HEIGHT];
-        int screen_width;
-        int screen_height;
+        uint16_t fb[SCREEN_WIDTH * SCREEN_HEIGHT];
+        int screen_width = SCREEN_WIDTH;
+        int screen_height = SCREEN_HEIGHT;
         DisplayOrientation orientation;
 
 
@@ -58,7 +58,12 @@ class DisplayDriver {
 
         /// @brief Checks whether a given pixel is within the bounds of the screen.
         bool in_bounds(int x, int y) const {
-            return (x >= 0 && x < screen_width && y >= 0 && y < screen_height);
+            if (orientation == DisplayOrientation::Landscape) {
+                return (x >= 0 && x < screen_width && y >= 0 && y < screen_height);
+
+            } else {
+                return (y >= 0 && y < screen_width && x >= 0 && x < screen_height);
+            }
         } 
 
     public:
