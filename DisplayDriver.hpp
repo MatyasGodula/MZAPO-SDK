@@ -20,6 +20,9 @@
 constexpr int SCREEN_WIDTH = 480;
 constexpr int SCREEN_HEIGHT = 320;
 
+constexpr int TEXT_VERTICAL_SPACING = 2; // Vertical spacing between lines of text
+constexpr int TEXT_HORIZONTAL_SPACING = 1; // Horizontal spacing between letters
+
 /// @brief FontType enum for different font types.
 /// @details This enum is used to specify the font type when drawing text on the display.
 /// @note The font types are defined in the font_types.h file.
@@ -68,7 +71,7 @@ class DisplayDriver {
             }
         } 
 
-        std::pair<int, int> map_coords(int x, int y);
+        inline std::pair<int, int> map_coords(int x, int y);
 
     public:
         /// @brief Constructor for DisplayDriver.
@@ -109,7 +112,20 @@ class DisplayDriver {
         /// @param font Font type to use for the character
         /// @param ch Character to draw
         /// @note The character will be drawn using the specified font type.
-        void draw_letter(int x, int y, FontType font, char ch);
+        void draw_letter(int x, int y, FontType font, char ch, Color color);
+
+        /// @brief Writes a string of text on the display at a specific position.
+        /// @param x The top left x coordinate of the text.
+        /// @param y The top left y coordinate of the text.
+        /// @param font Specifies the font type to use for the text.
+        /// @param text The string of text to draw.
+        /// @param color The color to draw the text with.
+        /// @note If the font allows for variable width letters, the text will be drawn with the correct width otherwise the width will be constant.
+        /// @note If the text is too long to fit on the screen, it will be clipped.
+        /// @note Is drawn in the same orientation as the display.
+        /// @note The text drawing respects newline characters.
+        /// @note The function uses defined spacing between letters and lines.
+        void draw_text(int x, int y, FontType font, std::string_view text, Color color);
 
         /// @brief Draws a sprite on the display given by its x and y coordinates.
         /// @param x X top left corner of the sprite
@@ -121,10 +137,10 @@ class DisplayDriver {
         /// @brief Fills the entire screen with a specific color.
         /// @param color The color to fill the screen with.
         /// @note Mostly used for black but I added color specification for funsies. Might be useful in the future.
-        void fill_screen(Color color);  
+        void fill_screen(Color color);
 
         /// @brief Flushes the frame buffer into the display memory
-        /// @note The display orietnation in memory is different from the buffer, so I have to pay the rotation tax somewhere
+        /// @note The display orientation in memory is different from the buffer, so I have to pay the rotation tax somewhere
         /// so I decided that it should be paid in flush();
         void flush();
 };
