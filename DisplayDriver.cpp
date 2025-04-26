@@ -64,70 +64,54 @@ void DisplayDriver::draw_rectangle(int x, int y, int width, int height, Color co
 }
 
 void DisplayDriver::draw_letter(int x, int y, FontType font, char ch, Color color) {
-    // TODO: Test and debug this function
     font_descriptor_t* fdes = get_font_descriptor(font);
     if (fdes == nullptr) { // Invalid font type
+        std::cout << "Invalid font type\n";
         return;
     }
-    // Get the index of the character in the whole font array
     int glyph_index = ch - fdes->firstchar;
     if (glyph_index < 0 || glyph_index >= fdes->size) { // Invalid index
+        std::cout << "Invalid index\n";
         return;
     }
-    const font_bits_t* glyph_bits = fdes->bits + fdes->offset[glyph_index]; // Get a pointer to the bits of the current glyph
-    int glyph_width = (fdes->width != 0) ? fdes->width[glyph_index] : fdes->maxwidth; // Get the width of the glyph
-    int glyph_height = fdes->height; // Get the height of the glyph
+    const font_bits_t *glyph_bits = fdes->bits + glyph_index * fdes->height;
 
-    int words_per_row = (glyph_width + 15) / 16; // Calculate the number of words per row
 
-    for (int row = 0; row < glyph_height; ++row) {
+    int glyph_width = (fdes->width) ? fdes->width[glyph_index] : fdes->maxwidth;
+
+    for (int row = 0; row < fdes->height; ++row) {
+        uint16_t row_data = glyph_bits[row];
         for (int col = 0; col < glyph_width; ++col) {
-            int word_index = (col / 16);
-            int bit_index = 15 - (col % 16); // Calculates the correct index from the right side 
-
-            font_bits_t word = glyph_bits[row * words_per_row + word_index];
-
-            if (word & (1 << bit_index)) {
+            if (row_data & (1 << (15 - col))) {
                 draw_pixel(x + col, y + row, color);
             }
         }
     }
-    /// @note I wrote this whole function and then I realized that the fonts are always at most 16 pixels wide.
-    /// @note So I could have just used a single loop and the bit index would be 15 - column index.
-    /// @note But I decided to keep it because I spent a lot of time on it.
 }
 
 void DisplayDriver::draw_text(int x, int y, FontType font, std::string_view text, Color color) {
-    // TODO: Test and debug this function
     font_descriptor_t* fdes = get_font_descriptor(font);
     if (fdes == nullptr) { // Invalid font type
         return;
     }
+
     int start_x = x;
-    std::string_view line;
-    while (!text.empty()) {
-        auto nline_pos = text.find('\n'); // Find the next newline character so we can split the text
-        if (nline_pos == std::string_view::npos) { // No newline found
-            line = text; // Take the rest of the text
-            text = ""; // Clear all else
-        } else {
-            line = text.substr(0, nline_pos); // Take the part of the text before the newline
-            text = text.substr(nline_pos + 1); // Remove the part of the text we just took
-        } 
-
-        for (char letter : line) {
-            if (letter < fdes->firstchar || letter >= fdes->firstchar + fdes->size) {
-                letter = fdes->defaultchar; // Replace invalid characters with the default character
-            }
-
-            draw_letter(x, y, font, letter, color);
-
-            int char_width = (fdes->width != 0) ? fdes->width[letter - fdes->firstchar] : fdes->maxwidth;
-            x += char_width + Constants::Text::HorizontalSpacing; // Move to the next character position + 1 pixel for spacing
+    
+    for (char letter : text) {
+        if (letter == '\n') {
+            x = start_x; // Reset x to the start position
+            y += fdes->height + Constants::Text::VerticalSpacing; // Move to the next line
+            continue;
         }
 
-        y += fdes->height + Constants::Text::VerticalSpacing; // Move to the next line
-        x = start_x; // Reset x to the start position
+        if (letter < fdes->firstchar || letter >= fdes->firstchar + fdes->size) {
+            letter = fdes->defaultchar; // Replace invalid characters with the default character
+        }
+
+        draw_letter(x, y, font, letter, color);
+
+        int char_width = (fdes->width) ? fdes->width[letter - fdes->firstchar] : fdes->maxwidth;
+        x += char_width + Constants::Text::HorizontalSpacing; // Move to the next character position + spacing
     }
 }
 
