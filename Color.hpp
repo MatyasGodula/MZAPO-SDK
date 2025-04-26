@@ -1,3 +1,10 @@
+/// @file Color.hpp
+/// @brief Color class for representing colors in RGB565 format.
+/// @details This class provides a way to create colors using RGB888 values and convert them to RGB565 format.
+/// @author Matyas Godula
+/// @date 22.4.2025
+/// @note This class is mostly used for readability and color standardization.
+
 #pragma once
 
 #include <cstdint>

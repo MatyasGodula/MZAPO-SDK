@@ -1,11 +1,14 @@
 #include "DisplayDriver.hpp"
+
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
 #include "font_types.h"
+
 #include <stdexcept>
 #include <iostream>
 #include <utility>
+#include <string_view>
 
 DisplayDriver::DisplayDriver(DisplayOrientation orientation) 
     : orientation(orientation) {
@@ -109,7 +112,7 @@ void DisplayDriver::draw_text(int x, int y, FontType font, std::string_view text
             text = ""; // Clear all else
         } else {
             line = text.substr(0, nline_pos); // Take the part of the text before the newline
-            text.substr(nline_pos + 1); // Remove the part of the text we just took
+            text = text.substr(nline_pos + 1); // Remove the part of the text we just took
         } 
 
         for (char letter : line) {
@@ -120,10 +123,10 @@ void DisplayDriver::draw_text(int x, int y, FontType font, std::string_view text
             draw_letter(x, y, font, letter, color);
 
             int char_width = (fdes->width != 0) ? fdes->width[letter - fdes->firstchar] : fdes->maxwidth;
-            x += char_width + TEXT_HORIZONTAL_SPACING; // Move to the next character position + 1 pixel for spacing
+            x += char_width + Constants::Text::HorizontalSpacing; // Move to the next character position + 1 pixel for spacing
         }
 
-        y += fdes->height + TEXT_VERTICAL_SPACING; // Move to the next line
+        y += fdes->height + Constants::Text::VerticalSpacing; // Move to the next line
         x = start_x; // Reset x to the start position
     }
 }

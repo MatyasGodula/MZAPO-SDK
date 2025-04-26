@@ -7,6 +7,7 @@
 #pragma once
 #include <cstdint>
 #include <utility>
+#include <string_view>
 
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
@@ -17,12 +18,6 @@
 
 #include "Sprite.hpp"
 
-constexpr int SCREEN_WIDTH = 480;
-constexpr int SCREEN_HEIGHT = 320;
-
-constexpr int TEXT_VERTICAL_SPACING = 2; // Vertical spacing between lines of text
-constexpr int TEXT_HORIZONTAL_SPACING = 1; // Horizontal spacing between letters
-
 /// @brief FontType enum for different font types.
 /// @details This enum is used to specify the font type when drawing text on the display.
 /// @note The font types are defined in the font_types.h file.
@@ -32,6 +27,22 @@ enum class FontType {
     WinFreeSystem14x16,
 };
 
+/// @brief Constants to avoid constexpr suggestions in other files.
+namespace Constants {
+    namespace Hardware {
+        constexpr int ScreenWidth = 480;
+        constexpr int ScreenHeight = 320;
+    }
+    
+    namespace Text {
+        constexpr int VerticalSpacing = 2; // Vertical spacing between lines of text
+        constexpr int HorizontalSpacing = 1; // Horizontal spacing between letters
+    }
+}
+
+/// @brief DisplayOrientation enum for different display orientations.
+/// @details This enum is used to specify the orientation of the display.
+/// @note The orientation is specified in the constructor of the DisplayDriver class.
 enum class DisplayOrientation: uint8_t {
     Portrait,
     Landscape,
@@ -41,9 +52,9 @@ enum class DisplayOrientation: uint8_t {
 class DisplayDriver {
     private:
         void* lcd;
-        uint16_t fb[SCREEN_WIDTH * SCREEN_HEIGHT];
-        int screen_width = SCREEN_WIDTH;
-        int screen_height = SCREEN_HEIGHT;
+        uint16_t fb[Constants::Hardware::ScreenWidth * Constants::Hardware::ScreenHeight];
+        int screen_width = Constants::Hardware::ScreenWidth;
+        int screen_height = Constants::Hardware::ScreenHeight;
         DisplayOrientation orientation;
 
 
