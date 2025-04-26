@@ -76,7 +76,6 @@ void DisplayDriver::draw_letter(int x, int y, FontType font, char ch, Color colo
     }
     const font_bits_t *glyph_bits = fdes->bits + glyph_index * fdes->height;
 
-
     int glyph_width = (fdes->width) ? fdes->width[glyph_index] : fdes->maxwidth;
 
     for (int row = 0; row < fdes->height; ++row) {
