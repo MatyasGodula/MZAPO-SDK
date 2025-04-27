@@ -1,3 +1,5 @@
+/// @note There might be a deadlock somewhere in the code but idk where
+
 #pragma once
 
 #include "mzapo_phys.h"
@@ -6,19 +8,21 @@
 #include <cstdint>
 #include <atomic>
 #include <mutex>
-
+#include <condition_variable>
+#include <stop_token>
+#include <thread>
 
 struct Tone {
 public: 
-    constexpr Tone(float frequency, float volume)
-    : frequency(frequency), volume(volume) {}
+    constexpr Tone(uint32_t frequency, uint32_t duty)
+    : frequency(frequency), duty(duty) {}
 
-    constexpr float get_frequency() {
+    constexpr uint32_t get_frequency() {
         return frequency;
     }
 
-    constexpr float get_volume() {
-        return volume;
+    constexpr uint32_t get_duty() {
+        return duty;
     }
 
     static const Tone PlayerMissile;
@@ -27,29 +31,36 @@ public:
     static const Tone NullTone;
 
 private:
-    float frequency;
-    float volume;
+    uint32_t frequency;
+    uint32_t duty;
 };
 
-constexpr Tone Tone::PlayerMissile = Tone(0.5, 0.5);
-constexpr Tone Tone::EnemyMissile = Tone(0.2, 0.5);
-constexpr Tone Tone::Explosion = Tone(0.8, 1);
-constexpr Tone Tone::NullTone = Tone(0.0, 0.0);
-
+constexpr Tone Tone::PlayerMissile = Tone(440000, 1000);
+constexpr Tone Tone::EnemyMissile = Tone(300000, 1000);
+constexpr Tone Tone::Explosion = Tone(1000000, 1000);
+constexpr Tone Tone::NullTone = Tone(500000, 1000);
 
 class AudioDriver {
 private:
     void* pwm_reg;
-    std::atomic<bool> new_tone_requested = false;
+    std::jthread worker;
     std::mutex current_tone_mutex;
+    std::condition_variable condvar;
+
     Tone current_tone = Tone::NullTone;
+    int current_duration_ms = 0;
+    std::atomic<bool> new_tone_requested = false;
+
+    void set_tone(uint32_t frequency, uint32_t duty);
+
+    void turn_off_buzzer();
 
 public:
     AudioDriver();
     ~AudioDriver();
 
-    void play_tone(Tone tone);
-    void audio_thread_loop();
+    void play_tone(Tone tone, int duration_ms);
+    void audio_thread_loop(std::stop_token stop_token);
 
     void stop_tone();
 
