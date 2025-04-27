@@ -43,9 +43,10 @@ constexpr Tone Tone::NullTone = Tone(500000, 1000);
 class AudioDriver {
 private:
     void* pwm_reg;
-    std::jthread worker;
-    std::mutex current_tone_mutex;
-    std::condition_variable condvar;
+    std::jthread worker; // The worker thread repsonsible for sound playing
+    std::mutex current_tone_mutex; // Mutex to protect the current_tone
+    std::condition_variable condvar; // Condition variable to notify the worker thread
+    std::stop_source stop_source; // Stop source stored manually to manually stop the worker
 
     Tone current_tone = Tone::NullTone;
     int current_duration_ms = 0;

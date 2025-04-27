@@ -13,17 +13,25 @@
 #include <chrono>
 #include <iostream>
 
-AudioDriver::AudioDriver() {
+AudioDriver::AudioDriver() :
+    stop_source()
+{
     pwm_reg = static_cast<void*>(map_phys_address(AUDIOPWM_REG_BASE_PHYS, AUDIOPWM_REG_SIZE, 0));
     
     if (pwm_reg == nullptr) {
         throw std::runtime_error("Failed to map physical address");
     }
 
-    worker = std::jthread(&AudioDriver::audio_thread_loop, this);
+    worker = std::jthread(
+        [this](std::stop_token token) {
+            audio_thread_loop(token);
+        },
+        stop_source.get_token()
+    );
 }
 
 AudioDriver::~AudioDriver() noexcept {
+    stop_source.request_stop();
     condvar.notify_one();
 }
 
@@ -45,10 +53,6 @@ void AudioDriver::turn_off_buzzer() {
 
 void AudioDriver::audio_thread_loop(std::stop_token stop_token) {
     while (!stop_token.stop_requested()) {
-        if (stop_token.stop_requested()) {
-            break;
-        }
-
         std::unique_lock lock(current_tone_mutex);
         condvar.wait(lock, [this, &stop_token]() { 
             return new_tone_requested || stop_token.stop_requested(); 
