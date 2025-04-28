@@ -1,3 +1,8 @@
+/// @file SpiledDriver.hpp
+/// @brief Class to control all of SPILED hardware.
+/// @author Matyas Godula
+/// @date 28.4.2025
+
 #include <cstdint>
 
 enum class KnobColor {

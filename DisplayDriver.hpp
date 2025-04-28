@@ -154,4 +154,10 @@ class DisplayDriver {
         /// @note The display orientation in memory is different from the buffer, so I have to pay the rotation tax somewhere
         /// so I decided that it should be paid in flush();
         void flush();
+
+
+        /// @brief Sets the orientation of the display.
+        /// @param orientation The orientation to set (Portrait or Landscape).
+        /// @note This function can be called at any time, it will blackout the screen so you can redraw it again.
+        void set_orientation(DisplayOrientation orientation);
 };

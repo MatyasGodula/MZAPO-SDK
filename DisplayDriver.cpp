@@ -140,5 +140,10 @@ void DisplayDriver::flush() {
             parlcd_write_data(static_cast<uint8_t*>(lcd), fb[y * screen_width + x]); // Copy all of the framebuffer data to the display
         }
     }
-    
+}
+
+void DisplayDriver::set_orientation(DisplayOrientation orientation) {
+    this->orientation = orientation;
+    fill_screen(Color::Black); // Clear the screen when changing orientation
+    flush();
 }
