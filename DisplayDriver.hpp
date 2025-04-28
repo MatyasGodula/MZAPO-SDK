@@ -155,9 +155,18 @@ class DisplayDriver {
         /// so I decided that it should be paid in flush();
         void flush();
 
-
         /// @brief Sets the orientation of the display.
         /// @param orientation The orientation to set (Portrait or Landscape).
         /// @note This function can be called at any time, it will blackout the screen so you can redraw it again.
         void set_orientation(DisplayOrientation orientation);
+
+        /// @brief Gets the width of the display in the current orientation.
+        /// @return Width of the display in pixels.
+        /// @note This width is determined by the orientation not the hardware.
+        int get_width() const;
+
+        /// @brief Gets the height of the display in the current orientation.
+        /// @return Height of the display in pixels.
+        /// @note This height is determined by the orientation not the hardware.
+        int get_height() const;
 };

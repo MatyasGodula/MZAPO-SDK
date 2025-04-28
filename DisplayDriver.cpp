@@ -147,3 +147,19 @@ void DisplayDriver::set_orientation(DisplayOrientation orientation) {
     fill_screen(Color::Black); // Clear the screen when changing orientation
     flush();
 }
+
+int DisplayDriver::get_width() const {
+    if (orientation == DisplayOrientation::Landscape) {
+        return screen_width;
+    } else {
+        return screen_height;
+    }
+}
+
+int DisplayDriver::get_height() const {
+    if (orientation == DisplayOrientation::Landscape) {
+        return screen_height;
+    } else {
+        return screen_width;
+    }
+}
