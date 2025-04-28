@@ -1,3 +1,8 @@
+/// @file Theme.hpp
+/// @brief Theme class for representing different themes in the game.
+/// @author Matyas Godula
+/// @date 29.4.2025
+
 #pragma once
 
 #include "Color.hpp"
