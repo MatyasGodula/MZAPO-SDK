@@ -62,7 +62,6 @@ void AudioDriver::audio_thread_loop(std::stop_token stop_token) {
     int duration_ms = 0;
     while (!stop_token.stop_requested()) {
         // Uses a more Rust-like approach to handling mutexes.
-        // TODO: Test and debug this.
         {
             // Lock the mutex for the condvar.
             std::unique_lock lock(current_tone_mutex);
@@ -102,14 +101,13 @@ void AudioDriver::audio_thread_loop(std::stop_token stop_token) {
                 break;
             }
             // No need for perpetual checking.
-            // TODO: Evaluate the sleep time.
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
         // After the duration, turn off the buzzer.
         turn_off_buzzer();
     }
     // Stop requested, end the thread.
-    std::cout << "Stop requested, exiting audio thread..." << std::endl;
+    std::cout << "Stop requested, exiting audio thread!..." << std::endl;
     turn_off_buzzer();
 }
 

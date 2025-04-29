@@ -15,6 +15,7 @@ struct Theme {
     Color turret;
     Color shield;
     Color aliens;
+    Color selection;
 };
 
 constexpr Theme DefaultTheme = {
@@ -22,7 +23,8 @@ constexpr Theme DefaultTheme = {
     .text = Color::White,
     .turret = Color::Green,
     .shield = Color::Green,
-    .aliens = Color::White
+    .aliens = Color::White,
+    .selection = Color::Green,
 };
 
 constexpr Theme LightTheme = {
@@ -30,7 +32,8 @@ constexpr Theme LightTheme = {
     .text = Color::Black,
     .turret = Color::Black,
     .shield = Color::Blue,
-    .aliens = Color::Black
+    .aliens = Color::Black,
+    .selection = Color::Magenta,
 };
 
 constexpr Theme Gruvbox = {
@@ -38,7 +41,8 @@ constexpr Theme Gruvbox = {
     .text = Color::White,
     .turret = Color(215, 153, 33), // Yellowish-Gold
     .shield = Color(69, 133, 136), // Teal
-    .aliens = Color::Red
+    .aliens = Color::Red,
+    .selection = Color(215, 153, 33), // Yellowish-Gold
 };
 
 constexpr Theme Solarized = {
@@ -46,7 +50,8 @@ constexpr Theme Solarized = {
     .text = Color(253, 246, 227), // Light Cream
     .turret = Color(108, 113, 196), // Violet
     .shield = Color(133, 153, 0), // Olive Green
-    .aliens = Color(220, 50, 47) // Red
+    .aliens = Color(220, 50, 47), // Red
+    .selection = Color(133, 153, 0), // Olive Green
 };
 
 constexpr Theme ThemeList[] = {

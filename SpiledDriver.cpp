@@ -4,6 +4,7 @@
 #include "mzapo_regs.h"
 
 #include <cstdint>
+#include <iostream>
 
 
 SpiledDriver::SpiledDriver(void* spiled_mem_base) :
@@ -27,12 +28,14 @@ bool SpiledDriver::init_led_line(uint8_t n_of_led_blocks) {
         return false;
     }
     led_section_size = Constants::Hardware::LedLineSize / n_of_led_blocks;
+    std::cout << static_cast<int>(led_section_size) << "\n";
     return true;
 }
 
 void SpiledDriver::set_led_bit(uint8_t index) {
-    int reverse_index = Constants::Hardware::LedLineSize - 1 - index;
-    if (index < n_of_led_blocks) {
+    
+    int reverse_index = Constants::Hardware::LedLineSize - index - 1;
+    if (index < Constants::Hardware::LedLineSize) {
         led_line |= (1 << reverse_index);
     }
 }
@@ -43,10 +46,7 @@ void SpiledDriver::set_led_line(uint32_t led_line) {
 }
 
 void SpiledDriver::set_led_line(uint8_t leds) {
-    if (leds < n_of_led_blocks) {
-        set_led_bit(leds);
-    }
-    for (int i = 0; i < n_of_led_blocks; i++) {
+    for (int i = 0; i < leds; i++) {
         for (int j = 0; j < led_section_size; j++) {
             set_led_bit(i * led_section_size + j);
         }

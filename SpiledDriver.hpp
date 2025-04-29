@@ -3,6 +3,8 @@
 /// @author Matyas Godula
 /// @date 28.4.2025
 
+#pragma once
+
 #include <cstdint>
 
 enum class KnobColor {
