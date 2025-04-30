@@ -62,6 +62,10 @@ class SpiledDriver {
         /// @return True if the knob has been pressed, false otherwise.
         bool read_knob_press(KnobColor color);
 
+        /// @brief Reads the value of a knob.
+        /// @param color The color of the knob to read.
+        uint8_t read_knob_val(KnobColor color);
+        
     private:
         void *spiled_mem_base;
         uint8_t red_prev_knob_val;
@@ -70,10 +74,6 @@ class SpiledDriver {
         uint8_t n_of_led_blocks;
         uint32_t led_line;
         uint8_t led_section_size;
-
-        /// @brief Reads the value of a knob.
-        /// @param color The color of the knob to read.
-        uint8_t read_knob_val(KnobColor color);
 
         /// @brief Sets a specific bit in the LED line.
         /// @param index The index of the LED to set.

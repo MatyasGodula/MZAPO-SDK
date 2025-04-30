@@ -11,7 +11,7 @@
 #include "Module.hpp"
 #include "SettingsModule.hpp"
 #include "MenuModule.hpp"
-
+#include "GameModule.hpp"
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
@@ -44,6 +44,7 @@ int main() {
 
     SettingsModule settings = SettingsModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
     MenuModule menu = MenuModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
+    GameModule game = GameModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
 
     Module *current_module = &menu;
 
@@ -65,6 +66,9 @@ int main() {
                     break;
                 case ModuleType::Menu:
                     current_module = &menu;
+                    break;
+                case ModuleType::Game:
+                    current_module = &game;
                     break;
                 default:
                     std::cout << "Invalid module type\n";
