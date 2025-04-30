@@ -26,7 +26,7 @@ MenuModule::MenuModule(
     current_type(current_type_ptr)
 {
     if (!screen || !buzzer || !spiled || !main_theme || !current_type) {
-        throw std::invalid_argument("Invalid argument passed to SettingsModule constructor");
+        throw std::invalid_argument("Invalid argument passed to MenuModule constructor");
     }
 }
 
@@ -45,6 +45,7 @@ void MenuModule::update() {
         std::cout << "Changing module\n";
         return;
     }
+    int selected_copy = setting_selected;
     int delta = spiled->read_knob_change(KnobColor::Green);
     if (delta > 2) {
         setting_selected++;
@@ -53,6 +54,9 @@ void MenuModule::update() {
     }
     if (setting_selected < 0) setting_selected = 0;
     if (setting_selected >= MenuModuleTypes::SelectionCount) setting_selected = MenuModuleTypes::SelectionCount - 1;
+    if (selected_copy != setting_selected) {
+        buzzer->play_tone(Tone::Selection, 100);
+    }
 }
 
 void MenuModule::redraw() {

@@ -23,19 +23,6 @@ SettingsModule::SettingsModule(
     main_theme(main_theme_ptr),
     current_type(current_type_ptr)
 {
-    if (!screen_ptr) {
-        std::cout << "Screen pointer is null\n";
-    } else if (!buzzer_ptr) {
-        std::cout << "Buzzer pointer is null\n";
-    } else if (!spiled_ptr) {
-        std::cout << "Spiled pointer is null\n";
-    } else if (!main_theme_ptr) {
-        std::cout << "Main theme pointer is null\n";
-    } else if (!current_type_ptr) {
-        std::cout << "Current type pointer is null\n";
-    } else {
-        std::cout << "All pointers are valid\n";
-    }
     if (!screen || !buzzer || !spiled || !main_theme || !current_type) {
         throw std::invalid_argument("Invalid argument passed to SettingsModule constructor");
     }
@@ -76,6 +63,7 @@ void SettingsModule::update() {
         std::cout << "Changing theme\n";
         return;
     }
+    int selected_copy = setting_selected;
     int delta = spiled->read_knob_change(KnobColor::Green);
     if (delta > 2) {
         setting_selected++;
@@ -84,6 +72,9 @@ void SettingsModule::update() {
     }
     if (setting_selected < 0) setting_selected = 0;
     if (setting_selected >= ThemeCount) setting_selected = ThemeCount - 1;
+    if (selected_copy != setting_selected) {
+        buzzer->play_tone(Tone::Selection, 100);
+    }
 
     //std::cout << "Setting selected: " << setting_selected << "\n";
 }

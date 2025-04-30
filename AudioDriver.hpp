@@ -32,6 +32,7 @@ public:
     static const Tone PlayerMissile;
     static const Tone EnemyMissile;
     static const Tone Explosion;
+    static const Tone Selection;
     static const Tone NullTone;
 
 private:
@@ -44,6 +45,7 @@ private:
 constexpr Tone Tone::PlayerMissile = Tone(440000, 1000);
 constexpr Tone Tone::EnemyMissile = Tone(300000, 1000);
 constexpr Tone Tone::Explosion = Tone(1000000, 1000);
+constexpr Tone Tone::Selection = Tone(350000, 1000);
 constexpr Tone Tone::NullTone = Tone(500000, 1000);
 
 
