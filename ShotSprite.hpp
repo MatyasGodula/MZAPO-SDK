@@ -12,7 +12,7 @@ private:
     };
 
 public:
-    ShotSprite() { width = 5; height = 15; }
+    ShotSprite() { width = 4; height = 20; }
 
     uint8_t at(int x, int y) const override {
         int sx = x * rawW / width;

@@ -51,14 +51,14 @@ GameModule::GameModule(
         {turret_x, baseY, &base},
         {20, 30, &invA}, {60, 30, &invA}, {100, 30, &invA}, {140, 30, &invA}, {180, 30, &invA}, {220, 30, &invA}, {260, 30, &invA},
         {20, 80, &invB}, {60, 80, &invB}, {100, 80, &invB}, {140, 80, &invB}, {180, 80, &invB}, {220, 80, &invB}, {260, 80, &invB},
-        {20, 130, &invC}, {60, 130, &invC}, {100, 130, &invC}, {140, 130, &invC}, {180, 130, &invC}, {220, 130, &invC}, {260, 130, &invC},
+        {20, 130, &invC, true}, {60, 130, &invC, true}, {100, 130, &invC, true}, {140, 130, &invC, true}, {180, 130, &invC, true}, {220, 130, &invC, true}, {260, 130, &invC, true},
     };
 
     shields = {
-        {&shield_1, {20, 300, &shield_1}},
-        {&shield_2, {100, 300, &shield_2}},
-        {&shield_3, {180, 300, &shield_3}},
-        {&shield_4, {260, 300, &shield_4}},
+        {&shield_1, {20, 375, &shield_1}},
+        {&shield_2, {100, 375, &shield_2}},
+        {&shield_3, {180, 375, &shield_3}},
+        {&shield_4, {260, 375, &shield_4}},
     };
 }
 
@@ -75,7 +75,6 @@ void GameModule::update() {
     }
 
     uint8_t knob_val = spiled->read_knob_val(KnobColor::Green);
-    int delta = spiled->read_knob_change(KnobColor::Green);
     turret_x = update_base_position(knob_val);
     entities[TURRET_POS].pos_x = turret_x;
 
@@ -100,18 +99,22 @@ void GameModule::redraw() {
         for (int y = 0; y < shield->height; ++y) {
             for (int x = 0; x < shield->width; ++x) {
                 if (shield->at(x, y)) {
-                    screen->draw_pixel(shield_entity.pos_x + x, shield_entity.pos_y + y, Color::Green);
+                    screen->draw_pixel(shield_entity.pos_x + x, shield_entity.pos_y + y, main_theme->shield);
                 }
             }
         }
     }
 
     for (auto& entity : entities) {
-        screen->draw_sprite(entity.pos_x, entity.pos_y, *(entity.sprite), Color::Green);
+        if (entity.is_shooter) {
+            screen->draw_sprite(entity.pos_x, entity.pos_y, *(entity.sprite), Color::Red);
+        } else {
+            screen->draw_sprite(entity.pos_x, entity.pos_y, *(entity.sprite), main_theme->turret);
+        }
     }
 
     for (auto& shot : shots) {
-        screen->draw_sprite(shot.pos_x, shot.pos_y, *(shot.sprite), Color::White);
+        screen->draw_sprite(shot.pos_x, shot.pos_y, *(shot.sprite), main_theme->selection);
     }
 
     screen->flush();
@@ -126,11 +129,8 @@ void GameModule::switch_to(ModuleType new_mod) {
 }
 
 int GameModule::update_base_position(uint8_t knob_val) {
-    int delta = knob_val - prev_knob;
-    if (delta > 127) delta -= 256;
-    if (delta < -127) delta += 256;
     prev_knob = knob_val;
-    int new_x = turret_x + delta * 2;
+    int new_x = turret_x + spiled->read_knob_change(KnobColor::Green) * 2;
     if (new_x < 0) new_x = 0;
     if (new_x > SCREEN_WIDTH - base.width) new_x = SCREEN_WIDTH - base.width;
     return new_x;
@@ -168,17 +168,25 @@ void GameModule::update_shots() {
         if (!destroyed) {
             for (size_t i = 1; i < entities.size(); ++i) {
                 Entity& target = entities[i];
+
+                if (target.sprite == &blank_sprite) continue;
+
                 bool collide_x = shot->pos_x + shot->sprite->width > target.pos_x &&
-                                 shot->pos_x < target.pos_x + target.sprite->width;
+                                shot->pos_x < target.pos_x + target.sprite->width;
                 bool collide_y = shot->pos_y + shot->sprite->height > target.pos_y &&
-                                 shot->pos_y < target.pos_y + target.sprite->height;
+                                shot->pos_y < target.pos_y + target.sprite->height;
+
                 if (collide_x && collide_y) {
-                    entities.erase(entities.begin() + i);
+                    if (i >= 8 && entities[i - 7].sprite != nullptr) {
+                        entities[i - 7].is_shooter = true;
+                    }
+                    entities[i].sprite = &blank_sprite;
                     destroyed = true;
                     break;
                 }
             }
         }
+
 
         if (destroyed || shot->pos_y + shot->sprite->height < 0) {
             shot = shots.erase(shot);
