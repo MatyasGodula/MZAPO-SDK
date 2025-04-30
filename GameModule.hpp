@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BlankSprite.hpp"
 #include "Module.hpp"
 #include "DisplayDriver.hpp"
 #include "SpiledDriver.hpp"
@@ -48,6 +49,7 @@ private:
     InvaderC invC;
     ShotSprite shotSprite;
     ShieldSprite shield_1, shield_2, shield_3, shield_4;
+    BlankSprite blank_sprite;
 
     unsigned char* lcd_mem_base = nullptr;
     unsigned char* spi_mem_base = nullptr;
