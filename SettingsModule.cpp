@@ -55,12 +55,10 @@ void SettingsModule::redraw() {
 void SettingsModule::update() {
     if (spiled->read_knob_press(KnobColor::Red)) {
         *current_type = ModuleType::Menu;
-        std::cout << "Changing to menu module\n";
         return;
     }
     if (spiled->read_knob_press(KnobColor::Green)) {
         *main_theme = ThemeList[setting_selected];
-        std::cout << "Changing theme\n";
         return;
     }
     int selected_copy = setting_selected;

@@ -37,12 +37,6 @@ MenuModule::~MenuModule() {
 void MenuModule::update() {
     if (spiled->read_knob_press(KnobColor::Green)) {
         *current_type = MenuModuleTypes::SelectionTypes[setting_selected];
-        if (*current_type == ModuleType::Settings) {
-            std::cout << "Changing to settings module\n";
-        } else if (*current_type == ModuleType::Menu) {
-            std::cout << "Changing to menu module\n";
-        }
-        std::cout << "Changing module\n";
         return;
     }
     int selected_copy = setting_selected;

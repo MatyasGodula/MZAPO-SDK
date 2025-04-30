@@ -1,4 +1,5 @@
 #include "GameModule.hpp"
+
 #include "AlienSprites.hpp"
 #include "DisplayDriver.hpp"
 #include "Entity.hpp"
@@ -8,9 +9,11 @@
 #include "SpiledDriver.hpp"
 #include "AudioDriver.hpp"
 #include "Theme.hpp"
+
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
+
 #include <ostream>
 #include <unistd.h>
 #include <ctime>
