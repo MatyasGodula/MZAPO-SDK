@@ -1,3 +1,10 @@
+/// @file MenuModule.hpp
+/// @brief Implements the Module trait, manages the main menu.
+/// @author Matyas Godula
+/// @date 29.4.2025
+
+#pragma once
+
 #include "Module.hpp"
 #include "DisplayDriver.hpp"
 #include "SpiledDriver.hpp"
@@ -25,9 +32,16 @@ namespace MenuModuleTypes {
     constexpr std::size_t SelectionCount = sizeof(MenuModuleTypes::SelectionTypes) / sizeof(MenuModuleTypes::SelectionTypes[0]);
 }
 
-
+/// @brief Class implements the main menu using the Module trait.
 class MenuModule : public Module {
     public:
+
+        /// @brief Constructor with all required drivers and references.
+        /// @param screen_ptr Reference to the display driver.
+        /// @param buzzer_ptr Reference to the audio driver.
+        /// @param spiled_ptr Reference to the spiled driver.
+        /// @param main_theme_ptr Reference to the currently active theme.
+        /// @param current_type_ptr Reference to the current module type, used when switching modules.
         MenuModule(
             DisplayDriver *screen_ptr, 
             AudioDriver *buzzer_ptr, 
@@ -41,17 +55,14 @@ class MenuModule : public Module {
 
         ~MenuModule() override;
 
-       
+        /// @brief Module trait interface.
         void update() override;
-
         void redraw() override;
-
         void switch_setup() override;
-
         void switch_to(ModuleType new_mod) override;
 
     private:
-        int setting_selected = 0;
+        int selection = 0;
         DisplayDriver *const screen;
         AudioDriver *const buzzer;
         SpiledDriver *const spiled;

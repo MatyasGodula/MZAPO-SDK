@@ -36,19 +36,19 @@ MenuModule::~MenuModule() {
 
 void MenuModule::update() {
     if (spiled->read_knob_press(KnobColor::Green)) {
-        *current_type = MenuModuleTypes::SelectionTypes[setting_selected];
+        *current_type = MenuModuleTypes::SelectionTypes[selection];
         return;
     }
-    int selected_copy = setting_selected;
+    int selected_copy = selection;
     int delta = spiled->read_knob_change(KnobColor::Green);
     if (delta > 2) {
-        setting_selected++;
+        selection++;
     } else if (delta < -2) {
-        setting_selected--;
+        selection--;
     }
-    if (setting_selected < 0) setting_selected = 0;
-    if (setting_selected >= MenuModuleTypes::SelectionCount) setting_selected = MenuModuleTypes::SelectionCount - 1;
-    if (selected_copy != setting_selected) {
+    if (selection < 0) selection = 0;
+    if (selection >= MenuModuleTypes::SelectionCount) selection = MenuModuleTypes::SelectionCount - 1;
+    if (selected_copy != selection) {
         buzzer->play_tone(Tone::Selection, 100);
     }
 }
@@ -66,7 +66,7 @@ void MenuModule::redraw() {
 
     screen->draw_rectangle(
         MenuConstants::selection_pos_x, 
-        MenuConstants::selection_pos_y + setting_selected * MenuConstants::selection_height, 
+        MenuConstants::selection_pos_y + selection * MenuConstants::selection_height, 
         MenuConstants::selection_width, 
         MenuConstants::selection_height, 
         main_theme->selection
