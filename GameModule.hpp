@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AlienShotSprite.hpp"
 #include "BlankSprite.hpp"
 #include "Module.hpp"
 #include "DisplayDriver.hpp"
@@ -7,7 +8,8 @@
 #include "AudioDriver.hpp"
 #include "Theme.hpp"
 #include "ShieldSprite.hpp"
-#include "ShotSprite.hpp"
+#include "AlienShotSprite.hpp"
+#include "TurretShotSprite.hpp"
 #include "BaseSprite.hpp"
 #include "AlienSprites.hpp"
 #include "Entity.hpp"
@@ -34,8 +36,10 @@ public:
     void switch_to(ModuleType new_mod) override;
 
 private:
-    int update_base_position(uint8_t knob_val);
+    int update_base_position();
     void update_shots();
+    void update_alien_positions();
+    void aliens_shoot();
 
     bool handle_shield_collisions(Entity& shot);
     bool handle_entity_collisions(Entity& shot);
@@ -50,7 +54,8 @@ private:
     InvaderA invA;
     InvaderB invB;
     InvaderC invC;
-    ShotSprite shotSprite;
+    AlienShotSprite alien_shot;
+    TurretShotSprite turret_shot;
     ShieldSprite shield_1, shield_2, shield_3, shield_4;
     BlankSprite blank_sprite;
 
@@ -63,8 +68,16 @@ private:
 
     int turret_x = 0;
     uint8_t prev_knob = 0;
-    int shot_cooldown = 0;
-    const int shot_cooldown_time = 10;
+    int turret_shot_cooldown = 0;
+    const int turret_shot_cooldown_time = 10;
+    int alien_shot_cooldown = 0;
+    const int alien_shot_cooldown_time = 50;
+
+    int destroyed_aliens_nbr = 0;
+    int alien_direction = 1;
+    int alien_speed = 1;
+
+    int turret_lives = 4;
 
     struct timespec loop_delay;
 };

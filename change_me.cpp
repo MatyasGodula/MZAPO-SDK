@@ -4,7 +4,6 @@
 #include "Color.hpp"
 #include "BaseSprite.hpp"
 #include "ShieldSprite.hpp"
-#include "ShotSprite.hpp"
 #include "SpiledDriver.hpp"
 #include "AudioDriver.hpp"
 #include "Theme.hpp"
