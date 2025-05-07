@@ -7,8 +7,8 @@
 
 namespace Constants {
     namespace Text {
-        constexpr int vertical_limit_pos = 480;
-        constexpr int vertical_limit_neg = -480;
+        constexpr int vertical_limit_pos = 0;
+        constexpr int vertical_limit_neg = -95;
     }
 }
 
@@ -33,6 +33,7 @@ class TutorialModule : public Module {
         void switch_to(ModuleType new_mod) override;
 
     private:
+        bool tutorial_shown = false;
         int text_position = 0;
         DisplayDriver *const screen;
         AudioDriver *const buzzer;

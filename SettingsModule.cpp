@@ -54,7 +54,7 @@ void SettingsModule::redraw() {
 
 void SettingsModule::update() {
     if (spiled->read_knob_press(KnobColor::Red)) {
-        *current_type = ModuleType::Menu;
+        switch_to(ModuleType::Menu);
         return;
     }
     if (spiled->read_knob_press(KnobColor::Green)) {

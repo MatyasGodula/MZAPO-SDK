@@ -36,7 +36,7 @@ MenuModule::~MenuModule() {
 
 void MenuModule::update() {
     if (spiled->read_knob_press(KnobColor::Green)) {
-        *current_type = MenuModuleTypes::SelectionTypes[selection];
+        switch_to(MenuModuleTypes::SelectionTypes[selection]);
         return;
     }
     int selected_copy = selection;

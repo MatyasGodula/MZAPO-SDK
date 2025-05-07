@@ -1,10 +1,5 @@
-#include "AlienSprites.hpp"
 #include "DisplayDriver.hpp"
-#include "Entity.hpp"
 #include "Color.hpp"
-#include "BaseSprite.hpp"
-#include "ShieldSprite.hpp"
-#include "ShotSprite.hpp"
 #include "SpiledDriver.hpp"
 #include "AudioDriver.hpp"
 #include "Theme.hpp"
@@ -12,6 +7,8 @@
 #include "SettingsModule.hpp"
 #include "MenuModule.hpp"
 #include "GameModule.hpp"
+#include "TutorialModule.hpp"
+
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
@@ -45,6 +42,7 @@ int main() {
     SettingsModule settings = SettingsModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
     MenuModule menu = MenuModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
     GameModule game = GameModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
+    TutorialModule space_invaders_tutorial = TutorialModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
 
     Module *current_module = &menu;
 
@@ -53,7 +51,6 @@ int main() {
     while (true) {
         ModuleType temp_type = current_type;
         current_module->update();
-        current_module->redraw();
         // The type changed inside of the update function so change to a different module
         if (current_type == ModuleType::Exit) {
             std::cout << "Exiting the main thread\n";
@@ -67,6 +64,9 @@ int main() {
                 case ModuleType::Menu:
                     current_module = &menu;
                     break;
+                case ModuleType::Tutorial:
+                    current_module = &space_invaders_tutorial;
+                    break;
                 case ModuleType::Game:
                     current_module = &game;
                     break;
@@ -75,8 +75,8 @@ int main() {
                     throw std::runtime_error("Invalid module type");
             }
             current_module->switch_setup();
-            current_module->redraw();
         }
+        current_module->redraw();
     }
 
     screen.fill_screen(Color::Black); // "Turn off" the screen 

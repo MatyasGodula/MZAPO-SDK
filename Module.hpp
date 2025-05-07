@@ -11,6 +11,7 @@ enum class ModuleType {
     Settings,
     Menu,
     Game,
+    Tutorial,
     Exit // Does not have its own module, just tells the main loop to exit
 };
 

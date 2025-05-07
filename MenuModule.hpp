@@ -20,7 +20,7 @@ namespace MenuConstants {
 
 namespace MenuModuleTypes {
     constexpr ModuleType SelectionTypes[] = {
-        ModuleType::Game,
+        ModuleType::Tutorial,
         ModuleType::Settings,
         ModuleType::Exit
     };
