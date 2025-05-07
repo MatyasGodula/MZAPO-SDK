@@ -37,6 +37,9 @@ private:
     int update_base_position(uint8_t knob_val);
     void update_shots();
 
+    bool handle_shield_collisions(Entity& shot);
+    bool handle_entity_collisions(Entity& shot);
+
     DisplayDriver* const screen;
     AudioDriver* const buzzer;
     SpiledDriver* const spiled;
