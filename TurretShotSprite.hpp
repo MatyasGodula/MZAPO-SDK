@@ -1,7 +1,7 @@
 #pragma once
 #include "Sprite.hpp"
 
-class ShotSprite : public Sprite {
+class TurretShotSprite : public Sprite {
 private:
     static constexpr int rawW = 2, rawH = 4;
     static constexpr uint8_t raw[rawH][rawW] = {
@@ -12,7 +12,7 @@ private:
     };
 
 public:
-    ShotSprite() { width = 4; height = 20; }
+    TurretShotSprite() { width = 4; height = 20; }
 
     uint8_t at(int x, int y) const override {
         int sx = x * rawW / width;
