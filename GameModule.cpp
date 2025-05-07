@@ -88,6 +88,7 @@ void GameModule::update() {
     entities[TURRET_POS].pos_x = turret_x;
 
     if (spiled->read_knob_press(KnobColor::Blue) && turret_shot_cooldown == 0) {
+        buzzer->play_tone(Tone::PlayerMissile, 250);
         Entity new_shot;
         new_shot.pos_x = entities[TURRET_POS].pos_x + base.width / 2 - turret_shot.width / 2;
         new_shot.pos_y = entities[TURRET_POS].pos_y;
@@ -232,6 +233,7 @@ void GameModule::aliens_shoot() {
     new_shot.pos_y = shooter.pos_y + shooter.sprite->height;
     new_shot.sprite = &alien_shot;
     shots.push_back(new_shot);
+    buzzer->play_tone(Tone::EnemyMissile, 250);
 
     alien_shot_cooldown = alien_shot_cooldown_time;
 }
