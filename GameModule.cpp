@@ -44,11 +44,11 @@ GameModule::GameModule(
     loop_delay.tv_sec = 0;
     loop_delay.tv_nsec = 50 * 1000;
 
-    int baseY = SCREEN_HEIGHT - base.height - 5;
+    int turret_y = SCREEN_HEIGHT - base.height - 5;
     turret_x = (SCREEN_WIDTH - base.width) / 2;
 
     entities = {
-        {turret_x, baseY, &base},
+        {turret_x, turret_y, &base},
         {20, 30, &invA}, {60, 30, &invA}, {100, 30, &invA}, {140, 30, &invA}, {180, 30, &invA}, {220, 30, &invA}, {260, 30, &invA},
         {20, 80, &invB}, {60, 80, &invB}, {100, 80, &invB}, {140, 80, &invB}, {180, 80, &invB}, {220, 80, &invB}, {260, 80, &invB},
         {20, 130, &invC, true}, {60, 130, &invC, true}, {100, 130, &invC, true}, {140, 130, &invC, true}, {180, 130, &invC, true}, {220, 130, &invC, true}, {260, 130, &invC, true},
@@ -67,7 +67,6 @@ GameModule::~GameModule() {
 }
 
 void GameModule::update() {
-    
     if (spiled->read_knob_press(KnobColor::Red)) {
         *current_type = ModuleType::Menu;
         std::cout << "Returning to menu module..." << std::endl;
@@ -90,11 +89,15 @@ void GameModule::update() {
     update_shots();
     if (shot_cooldown > 0) --shot_cooldown;
 
-    clock_nanosleep(CLOCK_MONOTONIC, 0, &loop_delay, nullptr);
+    if (clock_nanosleep(CLOCK_MONOTONIC, 0, &loop_delay, nullptr) != 0) {
+        perror("nanosleep failed");
+    }
 }
 
 void GameModule::redraw() {
     screen->fill_screen(main_theme->background);
+
+    // draw shields
     for (auto& [shield, shield_entity] : shields) {
         for (int y = 0; y < shield->height; ++y) {
             for (int x = 0; x < shield->width; ++x) {
@@ -105,6 +108,7 @@ void GameModule::redraw() {
         }
     }
 
+    // draw entities
     for (auto& entity : entities) {
         if (entity.is_shooter) {
             screen->draw_sprite(entity.pos_x, entity.pos_y, *(entity.sprite), Color::Red);
@@ -113,6 +117,7 @@ void GameModule::redraw() {
         }
     }
 
+    // draw shots
     for (auto& shot : shots) {
         screen->draw_sprite(shot.pos_x, shot.pos_y, *(shot.sprite), main_theme->selection);
     }
@@ -138,60 +143,68 @@ int GameModule::update_base_position(uint8_t knob_val) {
 
 void GameModule::update_shots() {
     for (auto shot = shots.begin(); shot != shots.end();) {
+        if (!shot->sprite) {
+            shot = shots.erase(shot);
+            continue;
+        }
+
         shot->pos_y -= 15;
-        bool destroyed = false;
 
-        for (auto& [shield, shield_entity] : shields) {
-            int local_x = shot->pos_x - shield_entity.pos_x;
-            int local_y = shot->pos_y - shield_entity.pos_y;
-            bool collision = false;
-            for (int sy = 0; sy < shot->sprite->height; ++sy) {
-                for (int sx = 0; sx < shot->sprite->width; ++sx) {
-                    int check_x = local_x + sx;
-                    int check_y = local_y + sy;
-                    if (check_x >= 0 && check_x < shield->width &&
-                        check_y >= 0 && check_y < shield->height &&
-                        shield->at(check_x, check_y) != 0) {
-                        collision = true;
-                        break;
-                    }
-                }
-                if (collision) break;
-            }
-            if (collision) {
-                shield->damage_area(local_x, local_y, 10);
-                destroyed = true;
-                break;
-            }
-        }
+        bool destroyed = handle_shield_collisions(*shot) || handle_entity_collisions(*shot);
 
-        if (!destroyed) {
-            for (size_t i = 1; i < entities.size(); ++i) {
-                Entity& target = entities[i];
-
-                if (target.sprite == &blank_sprite) continue;
-
-                bool collide_x = shot->pos_x + shot->sprite->width > target.pos_x &&
-                                shot->pos_x < target.pos_x + target.sprite->width;
-                bool collide_y = shot->pos_y + shot->sprite->height > target.pos_y &&
-                                shot->pos_y < target.pos_y + target.sprite->height;
-
-                if (collide_x && collide_y) {
-                    if (i >= 8 && entities[i - 7].sprite != nullptr) {
-                        entities[i - 7].is_shooter = true;
-                    }
-                    entities[i].sprite = &blank_sprite;
-                    destroyed = true;
-                    break;
-                }
-            }
-        }
-
-
-        if (destroyed || shot->pos_y + shot->sprite->height < 0) {
+        if (destroyed || (shot->pos_y + shot->sprite->height < 0)) {
             shot = shots.erase(shot);
         } else {
             ++shot;
         }
     }
 }
+
+bool GameModule::handle_shield_collisions(Entity& shot) {
+    for (auto& [shield, shield_entity] : shields) {
+        int local_x = shot.pos_x - shield_entity.pos_x;
+        int local_y = shot.pos_y - shield_entity.pos_y;
+
+        if (local_x < -10 || local_y < -10 || local_x >= shield->width || local_y >= shield->height)
+            continue;
+
+        for (int sy = 0; sy < shot.sprite->height; ++sy) {
+            for (int sx = 0; sx < shot.sprite->width; ++sx) {
+                int check_x = local_x + sx;
+                int check_y = local_y + sy;
+                if (check_x >= 0 && check_x < shield->width &&
+                    check_y >= 0 && check_y < shield->height &&
+                    shield->at(check_x, check_y) != 0) {
+
+                    if (local_x >= 0 && local_y >= 0)
+                        shield->damage_area(local_x, local_y, 10);
+
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool GameModule::handle_entity_collisions(Entity& shot) {
+    for (size_t i = 1; i < entities.size(); ++i) {
+        Entity& target = entities[i];
+        if (!target.sprite || target.sprite == &blank_sprite) continue;
+
+        bool collide_x = shot.pos_x + shot.sprite->width > target.pos_x &&
+                         shot.pos_x < target.pos_x + target.sprite->width;
+        bool collide_y = shot.pos_y + shot.sprite->height > target.pos_y &&
+                         shot.pos_y < target.pos_y + target.sprite->height;
+
+        if (collide_x && collide_y) {
+            if (i >= 8 && entities[i - 7].sprite != nullptr) {
+                entities[i - 7].is_shooter = true;
+            }
+            entities[i].sprite = &blank_sprite;
+            return true;
+        }
+    }
+    return false;
+}
+
