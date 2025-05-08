@@ -204,8 +204,7 @@ void GameModule::update_alien_positions() {
         int alien_bottom = entities[i].pos_y + entities[i].sprite->height;
 
         if (alien_bottom >= 375) {
-            // victory
-            std::cout << "GG" << std::endl;
+            switch_to(StateFlag::Loss);
             return;
         }
 
@@ -307,7 +306,7 @@ bool GameModule::handle_entity_collisions(Entity &shot) {
             if (i == TURRET_POS && shot.sprite == &alien_shot) {
                 turret_lives--;
                 if (turret_lives <= 0) {
-                    // defeat
+                    switch_to(StateFlag::Loss);
                 }
                 return true;
             }
@@ -322,9 +321,55 @@ bool GameModule::handle_entity_collisions(Entity &shot) {
                 entities[i].sprite = &blank_sprite;
                 destroyed_aliens_nbr++;
                 alien_speed = 1 + (destroyed_aliens_nbr / 5);
+                if (destroyed_aliens_nbr >= 21) {
+                    switch_to(StateFlag::Win);
+                }
                 return true;
             }
         }
     }
     return false;
+}
+
+void GameModule::reset_game() {
+    int turret_y = SCREEN_HEIGHT - base.height - 5;
+    turret_x = (SCREEN_WIDTH - base.width) / 2;
+
+    destroyed_aliens_nbr = 0;
+    alien_speed = 1;
+    alien_direction = 1;
+
+    shots.clear();
+
+    turret_lives = 4;
+
+    entities = {
+        {turret_x, turret_y, &base},
+        {20, 80, &invA},
+        {60, 80, &invA},
+        {100, 80, &invA},
+        {140, 80, &invA},
+        {180, 80, &invA},
+        {220, 80, &invA},
+        {260, 80, &invA},
+        {20, 130, &invB},
+        {60, 130, &invB},
+        {100, 130, &invB},
+        {140, 130, &invB},
+        {180, 130, &invB},
+        {220, 130, &invB},
+        {260, 130, &invB},
+        {20, 180, &invC, true},
+        {60, 180, &invC, true},
+        {100, 180, &invC, true},
+        {140, 180, &invC, true},
+        {180, 180, &invC, true},
+        {220, 180, &invC, true},
+        {260, 180, &invC, true},
+    };
+
+    shield_1.reset_shield();
+    shield_2.reset_shield();
+    shield_3.reset_shield();
+    shield_4.reset_shield();
 }

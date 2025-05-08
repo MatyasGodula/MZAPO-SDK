@@ -7,7 +7,7 @@ class ShieldSprite : public Sprite {
         static constexpr int rawW = 60;
         static constexpr int rawH = 40;
 
-        uint8_t data[rawH][rawW] = {
+        static constexpr uint8_t original_data[rawH][rawW] = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
              1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -90,10 +90,13 @@ class ShieldSprite : public Sprite {
              0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
         };
 
+        uint8_t data[rawH][rawW];
+
     public:
         ShieldSprite() {
             width = rawW;
             height = rawH;
+            reset_shield();
         }
 
         uint8_t at(int x, int y) const override {
@@ -114,6 +117,14 @@ class ShieldSprite : public Sprite {
                     if (dx * dx + dy * dy <= radius * radius) {
                         damage(cx + dx, cy + dy);
                     }
+                }
+            }
+        }
+
+        void reset_shield() {
+            for (int y = 0; y < rawH; ++y) {
+                for (int x = 0; x < rawW; ++x) {
+                    data[y][x] = original_data[y][x];
                 }
             }
         }
