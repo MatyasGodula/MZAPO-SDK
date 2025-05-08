@@ -7,7 +7,7 @@
 
 #include <exception>
 
-WinModule::WinModule(
+GameEndModule::GameEndModule(
     DisplayDriver *screen_ptr, 
     AudioDriver *buzzer_ptr, 
     SpiledDriver *spiled_ptr,
@@ -25,11 +25,11 @@ WinModule::WinModule(
     }
 }
 
-WinModule::~WinModule() {
+GameEndModule::~GameEndModule() {
     // Nothing happens
 }
 
-void WinModule::update() {
+void GameEndModule::update() {
     if (spiled->read_knob_press(KnobColor::Red) || 
         spiled->read_knob_press(KnobColor::Blue) ||
         spiled->read_knob_press(KnobColor::Green)) {
@@ -37,9 +37,9 @@ void WinModule::update() {
     }
 }
 
-void WinModule::redraw() {
+void GameEndModule::redraw() {
     screen->fill_screen(main_theme->background);
-    
+
     screen->draw_text(
         WinModuleConstants::Text::text_x_pos, 
         WinModuleConstants::Text::text_y_pos,       
@@ -51,11 +51,11 @@ void WinModule::redraw() {
     screen->flush();
 }
 
-void WinModule::switch_setup() {
+void GameEndModule::switch_setup() {
     screen->set_orientation(DisplayOrientation::Portrait);
     buzzer->play_tone(Tone::Explosion, 500); // Sad sound
 }
 
-void WinModule::switch_to(StateFlag new_mod) {
+void GameEndModule::switch_to(StateFlag new_mod) {
     *current_type = new_mod;
 }
