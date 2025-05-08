@@ -89,6 +89,7 @@ GameModule::~GameModule() {
 
 void GameModule::switch_setup() {
     screen->set_orientation(DisplayOrientation::Portrait);
+    spiled->init_led_line(4);
 }
 
 void GameModule::switch_to(StateFlag new_mod) {
@@ -106,7 +107,7 @@ void GameModule::update() {
     entities[TURRET_POS].pos_x = turret_x;
 
     if (spiled->read_knob_press(KnobColor::Blue) && turret_shot_cooldown == 0) {
-        buzzer->play_tone(Tone::PlayerMissile, 250);
+        // buzzer->play_tone(Tone::PlayerMissile, 250);
         Entity new_shot;
         new_shot.pos_x = entities[TURRET_POS].pos_x + base.width / 2 - turret_shot.width / 2;
         new_shot.pos_y = entities[TURRET_POS].pos_y;
@@ -122,12 +123,20 @@ void GameModule::update() {
         --turret_shot_cooldown;
     if (alien_shot_cooldown > 0)
         --alien_shot_cooldown;
+    
+    // set lives
+    spiled->clear_led_line();
+    spiled->set_led_line(static_cast<uint8_t>(turret_lives));
 
     clock_nanosleep(CLOCK_MONOTONIC, 0, &loop_delay, nullptr);
 }
 
 void GameModule::redraw() {
     screen->fill_screen(main_theme->background);
+
+    // score
+    std::string score_text = "Score: " + std::to_string(destroyed_aliens_nbr * 100);
+    screen->draw_text( 10, 10, FontType::WinFreeSystem14x16, score_text, main_theme->text );
 
     // draw shields
     for (auto &[shield, shield_entity] : shields) {
@@ -154,12 +163,6 @@ void GameModule::redraw() {
     // draw shots
     for (auto &shot : shots) {
         screen->draw_sprite(shot.pos_x, shot.pos_y, *(shot.sprite), main_theme->selection);
-    }
-
-    for (int i = 0; i < turret_lives; ++i) {
-        int life_x = 10 + i * 20;
-        int life_y = 10;
-        screen->draw_rectangle(life_x, life_y, 15, 15, main_theme->turret);
     }
 
     screen->flush();
@@ -257,7 +260,7 @@ void GameModule::aliens_shoot() {
     new_shot.pos_y = shooter.pos_y + shooter.sprite->height;
     new_shot.sprite = &alien_shot;
     shots.push_back(new_shot);
-    buzzer->play_tone(Tone::EnemyMissile, 250);
+    // buzzer->play_tone(Tone::EnemyMissile, 250);
 
     alien_shot_cooldown = alien_shot_cooldown_time;
 }

@@ -71,7 +71,7 @@ void SettingsModule::update() {
         switch_to(StateFlag::Menu);
         return;
     }
-    if (spiled->read_knob_press(KnobColor::Green)) {
+    if (spiled->read_knob_press(KnobColor::Blue)) {
         *main_theme = ThemeList[setting_selected];
         return;
     }
