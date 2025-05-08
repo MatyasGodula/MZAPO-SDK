@@ -1,24 +1,23 @@
 #include "DisplayDriver.hpp"
 
+#include "font_types.h"
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
-#include "font_types.h"
 
-#include <stdexcept>
 #include <iostream>
-#include <utility>
+#include <stdexcept>
 #include <string_view>
+#include <utility>
 
-DisplayDriver::DisplayDriver(DisplayOrientation orientation) 
-    : orientation(orientation) {
+DisplayDriver::DisplayDriver(DisplayOrientation orientation) : orientation(orientation) {
 
     lcd = map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
     if (lcd == nullptr) {
         throw std::runtime_error("Failed to map physical address");
     }
 
-    parlcd_hx8357_init(static_cast<uint8_t*>(lcd));
+    parlcd_hx8357_init(static_cast<uint8_t *>(lcd));
 }
 
 DisplayDriver::~DisplayDriver() {
@@ -27,17 +26,16 @@ DisplayDriver::~DisplayDriver() {
 
 inline std::pair<int, int> DisplayDriver::map_coords(int x, int y) {
     switch (orientation) {
-        case DisplayOrientation::Landscape:
-            return {x, y}; 
+    case DisplayOrientation::Landscape:
+        return {x, y};
 
-        case DisplayOrientation::Portrait:
-            return {y, screen_height - 1 - x};
+    case DisplayOrientation::Portrait:
+        return {y, screen_height - 1 - x};
 
-        default:
-            return {x, y};
+    default:
+        return {x, y};
     }
 }
-
 
 void DisplayDriver::draw_pixel(int x, int y, Color color) {
     if (in_bounds(x, y)) {
@@ -64,7 +62,7 @@ void DisplayDriver::draw_rectangle(int x, int y, int width, int height, Color co
 }
 
 void DisplayDriver::draw_letter(int x, int y, FontType font, char ch, Color color) {
-    font_descriptor_t* fdes = get_font_descriptor(font);
+    font_descriptor_t *fdes = get_font_descriptor(font);
     if (fdes == nullptr) { // Invalid font type
         std::cout << "Invalid font type\n";
         return;
@@ -89,17 +87,17 @@ void DisplayDriver::draw_letter(int x, int y, FontType font, char ch, Color colo
 }
 
 void DisplayDriver::draw_text(int x, int y, FontType font, std::string_view text, Color color) {
-    font_descriptor_t* fdes = get_font_descriptor(font);
+    font_descriptor_t *fdes = get_font_descriptor(font);
     if (fdes == nullptr) { // Invalid font type
         return;
     }
 
     int start_x = x;
-    
+
     for (char letter : text) {
         if (letter == '\n') {
             x = start_x; // Reset x to the start position
-            y += fdes->height + Constants::Text::VerticalSpacing; // Move to the next line
+            y += fdes->height + DisplayConstants::Text::VerticalSpacing; // Move to the next line
             continue;
         }
 
@@ -110,15 +108,16 @@ void DisplayDriver::draw_text(int x, int y, FontType font, std::string_view text
         draw_letter(x, y, font, letter, color);
 
         int char_width = (fdes->width) ? fdes->width[letter - fdes->firstchar] : fdes->maxwidth;
-        x += char_width + Constants::Text::HorizontalSpacing; // Move to the next character position + spacing
+        x += char_width + DisplayConstants::Text::HorizontalSpacing; // Move to the next character
+                                                                     // position + spacing
     }
 }
 
-void DisplayDriver::draw_sprite(int x, int y, const Sprite& sprite, Color color) {
+void DisplayDriver::draw_sprite(int x, int y, const Sprite &sprite, Color color) {
     for (int i = 0; i < sprite.width; ++i) {
         for (int j = 0; j < sprite.height; ++j) {
             uint8_t pixel = sprite.at(i, j);
-            if (pixel != 0 && in_bounds(x + i, y + j)) { 
+            if (pixel != 0 && in_bounds(x + i, y + j)) {
                 draw_pixel(x + i, y + j, color);
             }
         }
@@ -134,10 +133,12 @@ void DisplayDriver::fill_screen(Color color) {
 }
 
 void DisplayDriver::flush() {
-    parlcd_write_cmd(static_cast<uint8_t*>(lcd), 0x2C); // Write to RAM command
+    parlcd_write_cmd(static_cast<uint8_t *>(lcd), 0x2C); // Write to RAM command
     for (int y = 0; y < screen_height; ++y) {
         for (int x = 0; x < screen_width; ++x) {
-            parlcd_write_data(static_cast<uint8_t*>(lcd), fb[y * screen_width + x]); // Copy all of the framebuffer data to the display
+            parlcd_write_data(
+                static_cast<uint8_t *>(lcd),
+                fb[y * screen_width + x]); // Copy all of the framebuffer data to the display
         }
     }
 }

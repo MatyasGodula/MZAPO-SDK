@@ -7,23 +7,23 @@
 
 #include <cstdint>
 
-enum class KnobColor {
-    Red,
-    Green,
-    Blue
+enum class KnobColor { 
+    Red, 
+    Green, 
+    Blue 
 };
 
 namespace Constants {
     namespace Hardware {
         constexpr int LedLineSize = 32;
     }
-}
+} // namespace Constants
 
 /// @brief Class to control all of SPILED hardware.
 class SpiledDriver {
     public:
         /// @brief Constructor for the SpiledDriver class.
-        SpiledDriver(void* spiled_mem_base);
+        SpiledDriver(void *spiled_mem_base);
 
         /// @brief Destructor for the SpiledDriver class.
         ~SpiledDriver();
@@ -36,7 +36,8 @@ class SpiledDriver {
 
         /// @brief Sets all the LEDs in the line in blocks.
         /// @param leds The number of LEDs to set.
-        /// @note The LEDs are set in blocks, so if n_of_led_blocks is 4 and leds = 1, the first 32/4 = 8 LEDs will be set.
+        /// @note The LEDs are set in blocks, so if n_of_led_blocks is 4 and leds = 1, the first
+        /// 32/4 = 8 LEDs will be set.
         void set_led_line(uint8_t leds);
 
         /// @brief Sets the LED line to the specified value.
@@ -45,7 +46,7 @@ class SpiledDriver {
         void set_led_line(uint32_t led_line);
 
         /// @brief Clears the LED line.
-        void clear_led_line();  
+        void clear_led_line();
 
         /// @brief Sets the knob values for the red, green, and blue knobs.
         /// @note This function reads the current values of the knobs and stores them.
@@ -65,7 +66,7 @@ class SpiledDriver {
         /// @brief Reads the value of a knob.
         /// @param color The color of the knob to read.
         uint8_t read_knob_val(KnobColor color);
-        
+
     private:
         void *spiled_mem_base;
         uint8_t red_prev_knob_val;

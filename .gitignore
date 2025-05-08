@@ -4,3 +4,4 @@ space_invaders
 connect.gdb
 Makefile
 .vscode
+.clang-format

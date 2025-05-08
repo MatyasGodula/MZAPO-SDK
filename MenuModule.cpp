@@ -1,29 +1,27 @@
 #include "MenuModule.hpp"
 
-#include "Theme.hpp"
-#include "DisplayDriver.hpp"
 #include "AudioDriver.hpp"
-#include "SpiledDriver.hpp"
+#include "DisplayDriver.hpp"
 #include "Module.hpp"
+#include "SpiledDriver.hpp"
+#include "Theme.hpp"
 
-#include <string_view>
 #include <iostream>
 #include <stdexcept>
-
+#include <string_view>
 
 MenuModule::MenuModule(
     DisplayDriver *screen_ptr, 
     AudioDriver *buzzer_ptr, 
-    SpiledDriver *spiled_ptr, 
+    SpiledDriver *spiled_ptr,
     Theme *main_theme_ptr, 
-    ModuleType *current_type_ptr
-) 
-:
-    screen(screen_ptr),
-    buzzer(buzzer_ptr),
-    spiled(spiled_ptr),
+    StateFlag *current_type_ptr
+): 
+    screen(screen_ptr), 
+    buzzer(buzzer_ptr), 
+    spiled(spiled_ptr), 
     main_theme(main_theme_ptr),
-    current_type(current_type_ptr)
+    current_type(current_type_ptr) 
 {
     if (!screen || !buzzer || !spiled || !main_theme || !current_type) {
         throw std::invalid_argument("Invalid argument passed to MenuModule constructor");
@@ -46,8 +44,10 @@ void MenuModule::update() {
     } else if (delta < -2) {
         selection--;
     }
-    if (selection < 0) selection = 0;
-    if (selection >= MenuModuleTypes::SelectionCount) selection = MenuModuleTypes::SelectionCount - 1;
+    if (selection < 0)
+        selection = 0;
+    if (selection >= MenuModuleTypes::SelectionCount)
+        selection = MenuModuleTypes::SelectionCount - 1;
     if (selected_copy != selection) {
         buzzer->play_tone(Tone::Selection, 100);
     }
@@ -57,16 +57,16 @@ void MenuModule::redraw() {
     screen->fill_screen(main_theme->background);
     int vertical_index = MenuConstants::selection_pos_y;
     screen->draw_text(
-        MenuConstants::selection_pos_x + 10, 
-        vertical_index - MenuConstants::selection_height + 8, 
+        MenuConstants::selection_pos_x + 10,
+        vertical_index - MenuConstants::selection_height + 8,
         FontType::WinFreeSystem14x16, 
         "SPACE INVADERS", 
         main_theme->text
     );
 
     screen->draw_rectangle(
-        MenuConstants::selection_pos_x, 
-        MenuConstants::selection_pos_y + selection * MenuConstants::selection_height, 
+        MenuConstants::selection_pos_x,
+        MenuConstants::selection_pos_y + selection * MenuConstants::selection_height,
         MenuConstants::selection_width, 
         MenuConstants::selection_height, 
         main_theme->selection
@@ -75,7 +75,7 @@ void MenuModule::redraw() {
     for (std::string_view selection_name : MenuModuleTypes::SelectionNames) {
         screen->draw_text(
             MenuConstants::selection_pos_x + 10, 
-            vertical_index + 8, 
+            vertical_index + 8,
             FontType::WinFreeSystem14x16, 
             selection_name, 
             main_theme->text
@@ -91,6 +91,6 @@ void MenuModule::switch_setup() {
     screen->set_orientation(DisplayOrientation::Landscape);
 }
 
-void MenuModule::switch_to(ModuleType new_mod) {
+void MenuModule::switch_to(StateFlag new_mod) {
     *current_type = new_mod;
 }

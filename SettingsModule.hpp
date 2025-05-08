@@ -1,32 +1,32 @@
 #pragma once
 
-#include "Module.hpp"
-#include "Theme.hpp"
-#include "DisplayDriver.hpp"
 #include "AudioDriver.hpp"
+#include "DisplayDriver.hpp"
+#include "Module.hpp"
 #include "SpiledDriver.hpp"
+#include "Theme.hpp"
 
 constexpr int selection_height = 32;
 
 class SettingsModule : public Module {
-    public: 
+    public:
         SettingsModule(
             DisplayDriver *screen_ptr, 
             AudioDriver *buzzer_ptr, 
-            SpiledDriver *spiled_ptr, 
-            Theme *main_theme_ptr,
-            ModuleType *current_type_ptr
+            SpiledDriver *spiled_ptr,
+            Theme *main_theme_ptr, 
+            StateFlag *current_type_ptr
         );
 
-        SettingsModule(const SettingsModule&) = delete;
-        SettingsModule& operator=(const SettingsModule&) = delete;
+        SettingsModule(const SettingsModule &) = delete;
+        SettingsModule &operator=(const SettingsModule &) = delete;
 
         ~SettingsModule() override;
 
         void update() override;
         void redraw() override;
         void switch_setup() override;
-        void switch_to(ModuleType new_mod) override;
+        void switch_to(StateFlag new_mod) override;
 
     private:
         int setting_selected = 0;
@@ -34,6 +34,5 @@ class SettingsModule : public Module {
         AudioDriver *const buzzer;
         SpiledDriver *const spiled;
         Theme *main_theme;
-        ModuleType *current_type;
-        
+        StateFlag *current_type;
 };

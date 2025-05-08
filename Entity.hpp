@@ -3,10 +3,9 @@
 
 #include "Sprite.hpp"
 
-
 struct Entity {
-    int pos_x;
-    int pos_y;
-    Sprite* sprite;
-    bool is_shooter = false;
+        int pos_x;
+        int pos_y;
+        Sprite *sprite;
+        bool is_shooter = false;
 };

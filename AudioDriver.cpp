@@ -3,21 +3,19 @@
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
 
-#include <cstdint>
 #include <atomic>
-#include <mutex>
-#include <thread>
+#include <chrono>
+#include <cstdint>
 #include <expected>
+#include <iostream>
+#include <mutex>
 #include <stdexcept>
 #include <stop_token>
-#include <chrono>
-#include <iostream>
+#include <thread>
 
-AudioDriver::AudioDriver() :
-    stop_source()
-{
-    pwm_reg = static_cast<void*>(map_phys_address(AUDIOPWM_REG_BASE_PHYS, AUDIOPWM_REG_SIZE, 0));
-    
+AudioDriver::AudioDriver() : stop_source() {
+    pwm_reg = static_cast<void *>(map_phys_address(AUDIOPWM_REG_BASE_PHYS, AUDIOPWM_REG_SIZE, 0));
+
     if (pwm_reg == nullptr) {
         throw std::runtime_error("Failed to map physical address");
     }
@@ -26,12 +24,9 @@ AudioDriver::AudioDriver() :
     worker = std::jthread(
         // Capture the current instance and pass the stop token to the lambda.
         // A little note: This is actually very Rust-like.
-        [this](std::stop_token token) {
-            audio_thread_loop(token);
-        },
+        [this](std::stop_token token) { audio_thread_loop(token); },
         // Pass our own stop token that is used in the destructor.
-        stop_source.get_token()
-    );
+        stop_source.get_token());
 }
 
 AudioDriver::~AudioDriver() {
@@ -43,7 +38,7 @@ AudioDriver::~AudioDriver() {
 void AudioDriver::set_tone(uint32_t frequency_hz, uint32_t duty_pct) {
     if (pwm_reg == nullptr) {
         throw std::runtime_error("Trying to access a non mapped address");
-    } 
+    }
 
     *(volatile uint32_t *)(pwm_reg + AUDIOPWM_REG_PWMPER_o) = frequency_hz;
     *(volatile uint32_t *)(pwm_reg + AUDIOPWM_REG_PWM_o) = duty_pct;
@@ -56,7 +51,7 @@ void AudioDriver::turn_off_buzzer() {
     *(volatile uint32_t *)(pwm_reg + AUDIOPWM_REG_CR_o) = 0; // Disable
 }
 
-/// @note I tried to get as close to a Rust implementation as possible. 
+/// @note I tried to get as close to a Rust implementation as possible.
 void AudioDriver::audio_thread_loop(std::stop_token stop_token) {
     Tone tone = Tone::NullTone;
     int duration_ms = 0;
@@ -66,8 +61,8 @@ void AudioDriver::audio_thread_loop(std::stop_token stop_token) {
             // Lock the mutex for the condvar.
             std::unique_lock lock(current_tone_mutex);
             // Condvar waits for a notification and checks the stop token and new tone flag.
-            condvar.wait(lock, [this, &stop_token]() { 
-                return new_tone_requested || stop_token.stop_requested(); 
+            condvar.wait(lock, [this, &stop_token]() {
+                return new_tone_requested || stop_token.stop_requested();
             });
 
             // If the stop token has been rquested, break out of the loop.
@@ -80,7 +75,7 @@ void AudioDriver::audio_thread_loop(std::stop_token stop_token) {
             duration_ms = current_duration_ms;
             // Reset the new tone flag.
             new_tone_requested = false;
-        // End of the lock guard, mutex is automatically released here.
+            // End of the lock guard, mutex is automatically released here.
         }
 
         // Check if the tone is null or has a frequency of 0.
@@ -95,7 +90,8 @@ void AudioDriver::audio_thread_loop(std::stop_token stop_token) {
         // Start the timer for the duration of the tone.
         auto start_time = std::chrono::steady_clock::now();
         // Periodically check the timer so we know when to stop the tone.
-        while (std::chrono::steady_clock::now() - start_time < std::chrono::milliseconds(duration_ms)) {
+        while (std::chrono::steady_clock::now() - start_time <
+               std::chrono::milliseconds(duration_ms)) {
             // Check the stop token on every iteration.
             if (stop_token.stop_requested()) {
                 break;

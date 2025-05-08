@@ -6,8 +6,9 @@
 #pragma once
 
 /// @brief ModuleType used in the state machine.
-/// @details This enum is used to specify the type of module to switch to and which is currently being executed.
-enum class ModuleType {
+/// @details This enum is used to specify the type of module to switch to and which is currently
+/// being executed.
+enum class StateFlag {
     Settings,
     Menu,
     Game,
@@ -19,18 +20,18 @@ enum class ModuleType {
 /// @details This class is used to define the interface for all modules.
 class Module {
     public:
-
         /// @note Disables copy constructor and assignment operator.
         Module() = default;
-        Module(const Module&) = delete;
-        Module& operator=(const Module&) = delete;
+        Module(const Module &) = delete;
+        Module &operator=(const Module &) = delete;
 
         /// @brief Virtual destructor for the module class.
         virtual ~Module() = default;
 
         /// @brief The trait interface to be implemented by derived classes.
+
         virtual void update() = 0;
         virtual void redraw() = 0;
         virtual void switch_setup() = 0;
-        virtual void switch_to(ModuleType new_mod) = 0;
+        virtual void switch_to(StateFlag new_mod) = 0;
 };

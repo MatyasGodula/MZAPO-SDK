@@ -1,44 +1,44 @@
 #include "GameModule.hpp"
 
+#include "AlienShotSprite.hpp"
 #include "AlienSprites.hpp"
+#include "AudioDriver.hpp"
 #include "BaseSprite.hpp"
+#include "Color.hpp"
 #include "DisplayDriver.hpp"
 #include "Entity.hpp"
-#include "Color.hpp"
 #include "ShieldSprite.hpp"
-#include "AlienShotSprite.hpp"
-#include "TurretShotSprite.hpp"
 #include "SpiledDriver.hpp"
-#include "AudioDriver.hpp"
 #include "Theme.hpp"
+#include "TurretShotSprite.hpp"
 
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
 
-#include <ostream>
-#include <unistd.h>
-#include <ctime>
 #include <algorithm>
+#include <ctime>
 #include <iostream>
+#include <ostream>
 #include <random>
+#include <unistd.h>
 
-#define SCREEN_WIDTH  320
+#define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 480
 #define TURRET_POS 0
 
 GameModule::GameModule(
-    DisplayDriver* screen_ptr,
-    AudioDriver* buzzer_ptr,
-    SpiledDriver* spiled_ptr,
-    Theme* main_theme_ptr,
-    ModuleType* current_type_ptr
-) :
-    screen(screen_ptr),
-    buzzer(buzzer_ptr),
-    spiled(spiled_ptr),
+    DisplayDriver *screen_ptr, 
+    AudioDriver *buzzer_ptr, 
+    SpiledDriver *spiled_ptr,
+    Theme *main_theme_ptr, 
+    StateFlag *current_type_ptr
+    ): 
+    screen(screen_ptr), 
+    buzzer(buzzer_ptr), 
+    spiled(spiled_ptr), 
     main_theme(main_theme_ptr),
-    current_type(current_type_ptr)
+    current_type(current_type_ptr) 
 {
     if (!screen || !buzzer || !spiled || !main_theme || !current_type) {
         throw std::invalid_argument("Invalid argument passed to GameModule constructor");
@@ -52,9 +52,27 @@ GameModule::GameModule(
 
     entities = {
         {turret_x, turret_y, &base},
-        {20, 80, &invA}, {60, 80, &invA}, {100, 80, &invA}, {140, 80, &invA}, {180, 80, &invA}, {220, 80, &invA}, {260, 80, &invA},
-        {20, 130, &invB}, {60, 130, &invB}, {100, 130, &invB}, {140, 130, &invB}, {180, 130, &invB}, {220, 130, &invB}, {260, 130, &invB},
-        {20, 180, &invC, true}, {60, 180, &invC, true}, {100, 180, &invC, true}, {140, 180, &invC, true}, {180, 180, &invC, true}, {220, 180, &invC, true}, {260, 180, &invC, true},
+        {20, 80, &invA},
+        {60, 80, &invA},
+        {100, 80, &invA},
+        {140, 80, &invA},
+        {180, 80, &invA},
+        {220, 80, &invA},
+        {260, 80, &invA},
+        {20, 130, &invB},
+        {60, 130, &invB},
+        {100, 130, &invB},
+        {140, 130, &invB},
+        {180, 130, &invB},
+        {220, 130, &invB},
+        {260, 130, &invB},
+        {20, 180, &invC, true},
+        {60, 180, &invC, true},
+        {100, 180, &invC, true},
+        {140, 180, &invC, true},
+        {180, 180, &invC, true},
+        {220, 180, &invC, true},
+        {260, 180, &invC, true},
     };
 
     shields = {
@@ -73,13 +91,13 @@ void GameModule::switch_setup() {
     screen->set_orientation(DisplayOrientation::Portrait);
 }
 
-void GameModule::switch_to(ModuleType new_mod) {
+void GameModule::switch_to(StateFlag new_mod) {
     *current_type = new_mod;
 }
 
 void GameModule::update() {
     if (spiled->read_knob_press(KnobColor::Red)) {
-        *current_type = ModuleType::Menu;
+        *current_type = StateFlag::Menu;
         std::cout << "Returning to menu module..." << std::endl;
         return;
     }
@@ -100,8 +118,10 @@ void GameModule::update() {
     update_shots();
     update_alien_positions();
     aliens_shoot();
-    if (turret_shot_cooldown > 0) --turret_shot_cooldown;
-    if (alien_shot_cooldown > 0) --alien_shot_cooldown;
+    if (turret_shot_cooldown > 0)
+        --turret_shot_cooldown;
+    if (alien_shot_cooldown > 0)
+        --alien_shot_cooldown;
 
     clock_nanosleep(CLOCK_MONOTONIC, 0, &loop_delay, nullptr);
 }
@@ -110,11 +130,12 @@ void GameModule::redraw() {
     screen->fill_screen(main_theme->background);
 
     // draw shields
-    for (auto& [shield, shield_entity] : shields) {
+    for (auto &[shield, shield_entity] : shields) {
         for (int y = 0; y < shield->height; ++y) {
             for (int x = 0; x < shield->width; ++x) {
                 if (shield->at(x, y)) {
-                    screen->draw_pixel(shield_entity.pos_x + x, shield_entity.pos_y + y, main_theme->shield);
+                    screen->draw_pixel(shield_entity.pos_x + x, shield_entity.pos_y + y,
+                                       main_theme->shield);
                 }
             }
         }
@@ -122,7 +143,7 @@ void GameModule::redraw() {
 
     // draw entities
     for (size_t i = 0; i < entities.size(); ++i) {
-        auto& entity = entities[i];
+        auto &entity = entities[i];
         if (i == TURRET_POS) {
             screen->draw_sprite(entity.pos_x, entity.pos_y, *(entity.sprite), main_theme->turret);
         } else {
@@ -131,7 +152,7 @@ void GameModule::redraw() {
     }
 
     // draw shots
-    for (auto& shot : shots) {
+    for (auto &shot : shots) {
         screen->draw_sprite(shot.pos_x, shot.pos_y, *(shot.sprite), main_theme->selection);
     }
 
@@ -146,8 +167,10 @@ void GameModule::redraw() {
 
 int GameModule::update_base_position() {
     int new_x = turret_x + spiled->read_knob_change(KnobColor::Green) * 2;
-    if (new_x < 0) new_x = 0;
-    if (new_x > SCREEN_WIDTH - base.width) new_x = SCREEN_WIDTH - base.width;
+    if (new_x < 0)
+        new_x = 0;
+    if (new_x > SCREEN_WIDTH - base.width)
+        new_x = SCREEN_WIDTH - base.width;
     return new_x;
 }
 
@@ -175,8 +198,9 @@ void GameModule::update_alien_positions() {
 
     for (size_t i = 1; i < entities.size(); ++i) {
         // skip invisible aliens
-        if (entities[i].sprite == &blank_sprite) continue;
-        
+        if (entities[i].sprite == &blank_sprite)
+            continue;
+
         int alien_bottom = entities[i].pos_y + entities[i].sprite->height;
 
         if (alien_bottom >= 375) {
@@ -210,7 +234,8 @@ void GameModule::update_alien_positions() {
 }
 
 void GameModule::aliens_shoot() {
-    if (alien_shot_cooldown > 0) return;
+    if (alien_shot_cooldown > 0)
+        return;
 
     int number_shooters = 0;
     std::vector<size_t> shooter_indices;
@@ -226,7 +251,7 @@ void GameModule::aliens_shoot() {
     std::uniform_int_distribution<> distrib(0, number_shooters - 1);
     int random_number = distrib(gen);
 
-    Entity& shooter = entities[shooter_indices[random_number]];
+    Entity &shooter = entities[shooter_indices[random_number]];
 
     Entity new_shot;
     new_shot.pos_x = shooter.pos_x + shooter.sprite->width / 2 - alien_shot.width / 2;
@@ -238,14 +263,14 @@ void GameModule::aliens_shoot() {
     alien_shot_cooldown = alien_shot_cooldown_time;
 }
 
-bool GameModule::handle_shield_collisions(Entity& shot) {
-    for (auto& [shield, shield_entity] : shields) {
+bool GameModule::handle_shield_collisions(Entity &shot) {
+    for (auto &[shield, shield_entity] : shields) {
         int relative_x = shot.pos_x - shield_entity.pos_x;
         int relative_y = shot.pos_y - shield_entity.pos_y;
 
         // shot inside shield
-        if (relative_x < 0 || relative_x >= shield->width ||
-            relative_y < 0 || relative_y >= shield->height)
+        if (relative_x < 0 || relative_x >= shield->width || relative_y < 0 ||
+            relative_y >= shield->height)
             continue;
 
         // go through pixels
@@ -253,7 +278,8 @@ bool GameModule::handle_shield_collisions(Entity& shot) {
             for (int sx = 0; sx < shot.sprite->width; ++sx) {
                 int check_x = relative_x + sx;
                 int check_y = relative_y + sy;
-                if (check_x >= 0 && check_x < shield->width && check_y >= 0 && check_y < shield->height && shield->at(check_x, check_y) != 0) {
+                if (check_x >= 0 && check_x < shield->width && check_y >= 0 &&
+                    check_y < shield->height && shield->at(check_x, check_y) != 0) {
                     shield->damage_area(check_x, check_y, 10);
                     return true;
                 }
@@ -263,12 +289,13 @@ bool GameModule::handle_shield_collisions(Entity& shot) {
     return false;
 }
 
-bool GameModule::handle_entity_collisions(Entity& shot) {
+bool GameModule::handle_entity_collisions(Entity &shot) {
     for (size_t i = 0; i < entities.size(); ++i) {
-        Entity& target = entities[i];
+        Entity &target = entities[i];
 
         // skip invisible
-        if (target.sprite == &blank_sprite) continue;
+        if (target.sprite == &blank_sprite)
+            continue;
 
         bool collide_x = shot.pos_x + shot.sprite->width > target.pos_x &&
                          shot.pos_x < target.pos_x + target.sprite->width;
@@ -301,5 +328,3 @@ bool GameModule::handle_entity_collisions(Entity& shot) {
     }
     return false;
 }
-
-
