@@ -13,6 +13,9 @@ enum class StateFlag {
     Menu,
     Game,
     Tutorial,
+    Win,
+    Loss,
+    ResetGame,
     Exit // Does not have its own module, just tells the main loop to exit
 };
 

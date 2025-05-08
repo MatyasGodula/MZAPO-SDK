@@ -8,6 +8,7 @@
 #include "SpiledDriver.hpp"
 #include "Theme.hpp"
 #include "TutorialModule.hpp"
+#include "GameEndModule.hpp"
 
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
@@ -36,29 +37,29 @@ int main() {
     SpiledDriver spiled = SpiledDriver(spiled_mem_base);
     AudioDriver buzzer = AudioDriver();
     Theme main_theme = DefaultTheme;
-    StateFlag current_type = StateFlag::Menu;
+    StateFlag current_flag = StateFlag::Menu;
     spiled.init_knobs();
 
-    SettingsModule settings = SettingsModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
-    MenuModule menu = MenuModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
-    GameModule game = GameModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
-    TutorialModule space_invaders_tutorial =
-        TutorialModule(&screen, &buzzer, &spiled, &main_theme, &current_type);
+    SettingsModule settings = SettingsModule(&screen, &buzzer, &spiled, &main_theme, &current_flag);
+    MenuModule menu = MenuModule(&screen, &buzzer, &spiled, &main_theme, &current_flag);
+    GameModule game = GameModule(&screen, &buzzer, &spiled, &main_theme, &current_flag);
+    TutorialModule space_invaders_tutorial = TutorialModule(&screen, &buzzer, &spiled, &main_theme, &current_flag);
+    GameEndModule game_end_screen = GameEndModule(&screen, &buzzer, &spiled, &main_theme, &current_flag);
 
     Module *current_module = &menu;
 
     current_module->switch_setup();
 
     while (true) {
-        StateFlag temp_type = current_type;
+        StateFlag temp_type = current_flag;
         current_module->update();
         // The type changed inside of the update function so change to a different module
-        if (current_type == StateFlag::Exit) {
+        if (current_flag == StateFlag::Exit) {
             std::cout << "Exiting the main thread\n";
             break;
         }
-        if (temp_type != current_type) {
-            switch (current_type) {
+        if (temp_type != current_flag) {
+            switch (current_flag) {
             case StateFlag::Settings:
                 current_module = &settings;
                 break;
@@ -70,6 +71,20 @@ int main() {
                 break;
             case StateFlag::Game:
                 current_module = &game;
+                break;
+            case StateFlag::Win:
+                game_end_screen.set_game_end_state(GameEndState::Win);
+                current_module = &game_end_screen;
+                break;
+            case StateFlag::Loss:
+                game_end_screen.set_game_end_state(GameEndState::Loss);
+                current_module = &game_end_screen;
+                break;
+            case StateFlag::ResetGame:
+                game.reset_game();
+                game_end_screen.set_game_end_state(GameEndState::Ongoing);
+                current_module = &menu;
+                current_flag = StateFlag::Menu;
                 break;
             default:
                 std::cout << "Invalid module type\n";

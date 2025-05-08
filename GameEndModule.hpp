@@ -11,12 +11,26 @@ enum class GameEndState {
     Ongoing
 };
 
-namespace WinModuleConstants {
-    namespace Text {
-        constexpr int text_x_pos = 50;
-        constexpr int text_y_pos = 50;
-    } // namespace Text
-} // namespace WinModuleConstants
+namespace GameEndModuleConstants {
+    namespace Selections {
+        constexpr int selection_height = 32;
+        constexpr int selection_width = 100;
+        constexpr int selection_x_pos = 50;
+        constexpr int selection_y_pos = 50;
+
+        constexpr std::string_view selections[] {
+            "Play Again",
+            "Exit"
+        };
+
+        constexpr StateFlag selection_types[] {
+            StateFlag::ResetGame,
+            StateFlag::Exit
+        };
+
+        constexpr int selection_count = sizeof(selections) / sizeof(selections[0]);
+    } // namespace Selections
+} // namespace GameEndModuleConstants
 
 class GameEndModule : public Module {
     public:
@@ -39,10 +53,13 @@ class GameEndModule : public Module {
         void switch_setup() override;
         void switch_to(StateFlag new_mod) override;
 
+        /// @brief Used to signal a changed game state.
+        /// @param state The current state of the game.
         void set_game_end_state(GameEndState state);
 
     private:
         GameEndState game_end_state = GameEndState::Ongoing;
+        int selection = 0;
         DisplayDriver *screen;
         AudioDriver *buzzer;
         SpiledDriver *spiled;

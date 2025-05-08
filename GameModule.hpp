@@ -34,6 +34,9 @@ class GameModule : public Module {
         void switch_setup() override;
         void switch_to(StateFlag new_mod) override;
 
+        // TODO: Please implement
+        void reset_game();
+
     private:
         int update_base_position();
         void update_shots();

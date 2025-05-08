@@ -1,4 +1,4 @@
-#include "WinModule.hpp"
+#include "GameEndModule.hpp"
 #include "AudioDriver.hpp"
 #include "DisplayDriver.hpp"
 #include "Module.hpp"
@@ -6,6 +6,8 @@
 #include "Theme.hpp"
 
 #include <exception>
+#include <string_view>
+#include <iostream>
 
 GameEndModule::GameEndModule(
     DisplayDriver *screen_ptr, 
@@ -26,27 +28,66 @@ GameEndModule::GameEndModule(
 }
 
 GameEndModule::~GameEndModule() {
-    // Nothing happens
+    std::cout << "GameEndModule ending!..." << std::endl; 
 }
 
 void GameEndModule::update() {
-    if (spiled->read_knob_press(KnobColor::Red) || 
-        spiled->read_knob_press(KnobColor::Blue) ||
-        spiled->read_knob_press(KnobColor::Green)) {
-        switch_to(StateFlag::Exit);
+    if (spiled->read_knob_press(KnobColor::Green)) {
+        switch_to(GameEndModuleConstants::Selections::selection_types[selection]);
+        return;
+    }
+    int selected_copy = selection;
+    int delta = spiled->read_knob_change(KnobColor::Green);
+    if (delta > 2) {
+        selection++;
+    } else if (delta < -2) {
+        selection--;
+    }
+    if (selection < 0)
+        selection = 0;
+    if (selection >= GameEndModuleConstants::Selections::selection_count)
+        selection = GameEndModuleConstants::Selections::selection_count - 1;
+    if (selected_copy != selection) {
+        buzzer->play_tone(Tone::Selection, 100);
     }
 }
 
 void GameEndModule::redraw() {
     screen->fill_screen(main_theme->background);
-
+    std::string_view text = "NULL";
+    if (game_end_state == GameEndState::Win) {
+        text = "You Won!";
+    } else if (game_end_state == GameEndState::Loss) {
+        text = "Game Over!";
+    }
+    int vertical_index = GameEndModuleConstants::Selections::selection_y_pos;
     screen->draw_text(
-        WinModuleConstants::Text::text_x_pos, 
-        WinModuleConstants::Text::text_y_pos,       
+        GameEndModuleConstants::Selections::selection_x_pos + 10, 
+        vertical_index - GameEndModuleConstants::Selections::selection_height + 8,       
         FontType::WinFreeSystem14x16, 
-        "You Won!\n\nPress any knob to exit",
+        text,
         main_theme->text
     );
+
+    screen->draw_rectangle(
+        GameEndModuleConstants::Selections::selection_x_pos,
+        (GameEndModuleConstants::Selections::selection_y_pos + 
+            selection * GameEndModuleConstants::Selections::selection_height),
+        GameEndModuleConstants::Selections::selection_width,
+        GameEndModuleConstants::Selections::selection_height,
+        main_theme->selection
+    );
+
+    for (std::string_view selection_name : GameEndModuleConstants::Selections::selections) {
+        screen->draw_text(
+            GameEndModuleConstants::Selections::selection_x_pos + 10, 
+            vertical_index + 8,
+            FontType::WinFreeSystem14x16, 
+            selection_name, 
+            main_theme->text
+        );
+        vertical_index += GameEndModuleConstants::Selections::selection_height;
+    }
 
     screen->flush();
 }
@@ -58,4 +99,8 @@ void GameEndModule::switch_setup() {
 
 void GameEndModule::switch_to(StateFlag new_mod) {
     *current_type = new_mod;
+}
+
+void GameEndModule::set_game_end_state(GameEndState state) {
+    game_end_state = state;
 }
