@@ -1,3 +1,8 @@
+/// @file GameModule.hpp
+/// @brief GameModule class for the game logic.
+/// @author Albert Bastl
+/// @date 29.4.2025
+
 #pragma once
 
 #include "AlienShotSprite.hpp"

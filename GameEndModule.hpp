@@ -1,3 +1,8 @@
+/// @file GameEndModule.hpp
+/// @brief GameEndModule class for handling the endgame screen.
+/// @author Matyas Godula
+/// @date 8.5.2025
+
 #include "AudioDriver.hpp"
 #include "DisplayDriver.hpp"
 #include "Module.hpp"
@@ -5,6 +10,7 @@
 
 #include "Theme.hpp"
 
+/// @brief GameEndModule class for handling the current end state of the game.
 enum class GameEndState {
     Win,
     Loss,
@@ -32,8 +38,19 @@ namespace GameEndModuleConstants {
     } // namespace Selections
 } // namespace GameEndModuleConstants
 
+/// @brief GameEndModule class for handling the endgame screen.
+/// @details This class is responsible for displaying the endgame screen and handling user input.
+/// @note The endgame screen displays the result of the game (win or loss) and allows the user to
+/// play again or exit the game.
 class GameEndModule : public Module {
     public:
+        /// @brief Constructor for the GameEndModule class.
+        /// @param screen_ptr Pointer to the display driver.
+        /// @param buzzer_ptr Pointer to the audio driver.
+        /// @param spiled_ptr Pointer to the SPILED driver.
+        /// @param main_theme_ptr Pointer to the main theme.
+        /// @param current_type_ptr Pointer to the current system flag.
+        /// @note This constructor follows the Module trait interface.
         GameEndModule(
             DisplayDriver *screen_ptr, 
             AudioDriver *buzzer_ptr, 

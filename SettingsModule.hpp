@@ -1,3 +1,8 @@
+/// @file SettingsModule.hpp
+/// @brief SettingsModule class for handling the settings screen.
+/// @author Matyas Godula
+/// @date 30.4.2025
+
 #pragma once
 
 #include "AudioDriver.hpp"
@@ -8,6 +13,10 @@
 
 constexpr int selection_height = 32;
 
+/// @brief SettingsModule class for handling the settings screen.
+/// @details This class is responsible for displaying the settings screen and handling user input.
+/// @note The settings screen allows the user to change the theme.
+/// @note This class implements the Module trait interface.
 class SettingsModule : public Module {
     public:
         SettingsModule(
@@ -18,11 +27,13 @@ class SettingsModule : public Module {
             StateFlag *current_type_ptr
         );
 
+        /// @brief Deleted copy constructor and assignment operator.
         SettingsModule(const SettingsModule &) = delete;
         SettingsModule &operator=(const SettingsModule &) = delete;
 
         ~SettingsModule() override;
 
+        /// @brief Module trait interface implementation.
         void update() override;
         void redraw() override;
         void switch_setup() override;

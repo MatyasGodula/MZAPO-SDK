@@ -1,3 +1,8 @@
+/// @file TutorialModule.hpp
+/// @brief TutorialModule class for handling the tutorial screen.
+/// @author Matyas Godula
+/// @date 5.5.2025
+
 #include "AudioDriver.hpp"
 #include "DisplayDriver.hpp"
 #include "Module.hpp"
@@ -11,6 +16,13 @@ namespace Constants {
     } // namespace Text
 } // namespace Constants
 
+/// @brief TutorialModule class for handling the tutorial screen.
+/// @details This class is responsible for displaying the tutorial screen and handling user input.
+/// @note The tutorial screen displays the instructions for the game and allows the user to start
+/// the game.
+/// @note This class implements the Module trait interface.
+/// @note The tutorial screen is displayed only once, next time the game is started, the
+/// tutorial is skipped.
 class TutorialModule : public Module {
     public:
         TutorialModule(
@@ -21,17 +33,20 @@ class TutorialModule : public Module {
             StateFlag *current_type_ptr
         );
 
+        /// @brief Deleted copy constructor and assignment operator. 
         TutorialModule(const TutorialModule &) = delete;
         TutorialModule &operator=(const TutorialModule &) = delete;
 
         ~TutorialModule() override;
 
+        /// @brief Module trait interface implementation.
         void update() override;
         void redraw() override;
         void switch_setup() override;
         void switch_to(StateFlag new_mod) override;
 
     private:
+        /// @brief Tracks whether the the tutorial has been shown.
         bool tutorial_shown = false;
         int text_position = 0;
         DisplayDriver *const screen;
