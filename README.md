@@ -1,4 +1,4 @@
-# Space Invaders for MZ-APO (Modular SDK + A game)
+# Space Invaders for MZ-APO (Modular SDK + game)
 
 A modular C++ game framework for the MZ-APO board, developed as a semestral project at CTU FEE for the Computer Architectures class (B0B35APO)
 This project implements a Space Invaders clone and a modular driver-based SDK suitable for bulding other games or applications for the MZ-APO board.
