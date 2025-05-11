@@ -1,9 +1,8 @@
-/// @file GameModule.hpp
-/// @brief GameModule class for the game logic.
-/// @author Albert Bastl
-/// @date 29.4.2025
-
 #pragma once
+
+#include <ctime>
+#include <utility>
+#include <vector>
 
 #include "AlienShotSprite.hpp"
 #include "AlienSprites.hpp"
@@ -18,73 +17,121 @@
 #include "Theme.hpp"
 #include "TurretShotSprite.hpp"
 
-#include <ctime>
-#include <utility>
-#include <vector>
-
+/// @brief GameModule class for core game logic and handling gameplay.
+/// @details This class manages game state, updates, rendering, and user input during gameplay.
+/// @note It handles entities, shots, shields, scoring, and transitions between game states.
 class GameModule : public Module {
-    public:
-        GameModule(
-            DisplayDriver *screen_ptr, 
-            AudioDriver *buzzer_ptr, 
-            SpiledDriver *spiled_ptr,
-            Theme *main_theme_ptr, 
-            StateFlag *current_type_ptr
-        );
+public:
+    /// @brief Constructs a GameModule with necessary drivers and theme.
+    /// @param screen_ptr Pointer to the DisplayDriver for rendering game visuals.
+    /// @param buzzer_ptr Pointer to the AudioDriver for playing sound effects.
+    /// @param spiled_ptr Pointer to the SpiledDriver for additional hardware integration.
+    /// @param main_theme_ptr Pointer to the Theme defining game visuals and audio themes.
+    /// @param current_type_ptr Pointer to the current state flag for mode switching.
+    GameModule(
+        DisplayDriver *screen_ptr,
+        AudioDriver *buzzer_ptr,
+        SpiledDriver *spiled_ptr,
+        Theme *main_theme_ptr,
+        StateFlag *current_type_ptr
+    );
 
-        ~GameModule() override;
+    /// @brief Destroys the GameModule and releases resources.
+    ~GameModule() override;
 
-        void update() override;
-        void redraw() override;
-        void switch_setup() override;
-        void switch_to(StateFlag new_mod) override;
+    /// @brief Updates game state each frame.
+    /// @details Handles input processing, entity updates, collision detection, and state transitions.
+    void update() override;
 
-        // TODO: Please implement
-        void reset_game();
+    /// @brief Redraws the game screen.
+    /// @details Renders all entities, shots, shields, and game HUD to the display.
+    void redraw() override;
 
-    private:
-        int update_base_position();
-        void update_shots();
-        void update_alien_positions();
-        void aliens_shoot();
+    /// @brief Sets up initial conditions when switching to this module.
+    void switch_setup() override;
 
-        bool handle_shield_collisions(Entity &shot);
-        bool handle_entity_collisions(Entity &shot);
+    /// @brief Switches to a different game state.
+    /// @param new_mod The new state flag indicating the target module.
+    void switch_to(StateFlag new_mod) override;
 
-        DisplayDriver *const screen;
-        AudioDriver *const buzzer;
-        SpiledDriver *const spiled;
-        Theme *const main_theme;
-        StateFlag *const current_type;
+    /// @brief Resets the game to its initial state.
+    /// @details Clears entities, shots, scores, and resets player lives and positions.
+    void reset_game();
 
-        BaseSprite base;
-        InvaderA invA;
-        InvaderB invB;
-        InvaderC invC;
-        AlienShotSprite alien_shot;
-        TurretShotSprite turret_shot;
-        ShieldSprite shield_1, shield_2, shield_3, shield_4;
-        BlankSprite blank_sprite;
+private:
+    /// @name Core update routines
+    /// @{ 
+    /// @brief Updates the player's base (turret) position based on input.
+    /// @return The updated x-coordinate of the turret.
+    int update_base_position();
 
-        unsigned char *lcd_mem_base = nullptr;
-        unsigned char *spi_mem_base = nullptr;
+    /// @brief Updates all active shots in the game.
+    void update_shots();
 
-        std::vector<Entity> entities;
-        std::vector<Entity> shots;
-        std::vector<std::pair<ShieldSprite *, Entity>> shields;
+    /// @brief Updates positions of all alien entities.
+    void update_alien_positions();
 
-        int turret_x = 0;
-        uint8_t prev_knob = 0;
-        int turret_shot_cooldown = 0;
-        const int turret_shot_cooldown_time = 10;
-        int alien_shot_cooldown = 0;
-        const int alien_shot_cooldown_time = 50;
+    /// @brief Handles alien shooting logic.
+    void aliens_shoot();
+    /// @}
 
-        int destroyed_aliens_nbr = 0;
-        int alien_direction = 1;
-        int alien_speed = 1;
+    /// @name Collision handling
+    /// @{ 
+    /// @brief Checks for collisions between a shot and shields.
+    /// @param shot The shot entity to check.
+    /// @return True if the shot collides with a shield.
+    bool handle_shield_collisions(Entity &shot);
 
-        int turret_lives = 4;
+    /// @brief Checks for collisions between a shot and other entities (aliens, turret).
+    bool handle_entity_collisions(Entity &shot);
+    /// @}
 
-        struct timespec loop_delay;
+    /// @name Hardware interfaces
+    /// @{ 
+    DisplayDriver *const screen;     ///< Display driver for rendering
+    AudioDriver *const buzzer;       ///< Audio driver for sound effects
+    SpiledDriver *const spiled;      ///< Spiled hardware driver
+    Theme *const main_theme;         ///< Current visual/audio theme
+    StateFlag *const current_type;   ///< Pointer to current module state
+    /// @}
+
+    /// @name Sprites and entities
+    /// @{ 
+    BaseSprite base;                  ///< Player's turret sprite
+    InvaderA inv_a;                  ///< Alien type A sprite
+    InvaderB inv_b;                  ///< Alien type B sprite
+    InvaderC inv_c;                  ///< Alien type C sprite
+    AlienShotSprite alien_shot;      ///< Sprite for alien shots
+    TurretShotSprite turret_shot;    ///< Sprite for turret shots
+    ShieldSprite shield_1, shield_2, shield_3, shield_4;  ///< Shield sprites
+    BlankSprite blank_sprite;         ///< Placeholder sprite
+    /// @}
+
+    /// @brief Base addresses for display memory
+    unsigned char *lcd_mem_base = nullptr; ///< LCD memory base pointer
+    unsigned char *spi_mem_base = nullptr; ///< SPI memory base pointer
+
+    /// @brief Active game entities and shots
+    std::vector<Entity> entities;    ///< Active aliens and other entities
+    std::vector<Entity> shots;       ///< Active shot entities
+    std::vector<std::pair<ShieldSprite *, Entity>> shields; ///< Shield positions and entities
+
+    /// @name Gameplay state variables
+    /// @{ 
+    int turret_x = 0;                ///< Current x-position of the turret
+    uint8_t prev_knob = 0;           ///< Previous knob input value
+    int turret_shot_cooldown = 0;    ///< Cooldown timer for turret shots
+    const int turret_shot_cooldown_time = 10; ///< Frames between turret shots
+    int alien_shot_cooldown = 0;     ///< Cooldown timer for alien shots
+    const int alien_shot_cooldown_time = 50; ///< Frames between alien shots
+
+    int destroyed_aliens_nbr = 0;    ///< Count of destroyed aliens
+    int alien_direction = 1;         ///< Current horizontal movement direction of aliens
+    int alien_speed = 1;             ///< Speed multiplier for alien movement
+
+    int turret_lives = 4;            ///< Remaining player lives
+    /// @}
+
+    /// @brief Delay timing for game loop
+    struct timespec loop_delay;      ///< Time delay between game loop iterations
 };

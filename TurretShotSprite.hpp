@@ -3,8 +3,8 @@
 
 class TurretShotSprite : public Sprite {
     private:
-        static constexpr int rawW = 2, rawH = 4;
-        static constexpr uint8_t raw[rawH][rawW] = {{1, 1}, {1, 1}, {1, 1}, {1, 1}};
+        static constexpr int raw_w = 2, raw_h = 4;
+        static constexpr uint8_t raw[raw_h][raw_w] = {{1, 1}, {1, 1}, {1, 1}, {1, 1}};
 
     public:
         TurretShotSprite() {
@@ -13,8 +13,8 @@ class TurretShotSprite : public Sprite {
         }
 
         uint8_t at(int x, int y) const override {
-            int sx = x * rawW / width;
-            int sy = y * rawH / height;
+            int sx = x * raw_w / width;
+            int sy = y * raw_h / height;
             return raw[sy][sx];
         }
 };
