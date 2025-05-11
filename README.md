@@ -19,13 +19,13 @@ This project implements a Space Invaders clone and a modular driver-based SDK su
 
 ## Project Structure
 
-include/ # Public headers
-src/ # Source code for drivers and modules
-third_party/ # Provided code
-assets/ # Fonts
-docs/ # Documentation
-LICENSE # MIT project license
-Makefile # Compilation
+- `include/` – Public headers
+- `src/` – Source code for drivers and modules
+- `third_party/` – Provided hardware-related `.c/.h` files
+- `assets/` – Fonts and sprite data
+- `docs/` – Architecture diagrams and supporting docs
+- `LICENSE` – MIT license
+- `Makefile` – Cross-compilation and deployment rules
 
 
 ## Build Instructions
