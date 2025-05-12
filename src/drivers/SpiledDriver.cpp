@@ -28,7 +28,6 @@ bool SpiledDriver::init_led_line(uint8_t n_of_led_blocks) {
         return false;
     }
     led_section_size = Constants::Hardware::LedLineSize / n_of_led_blocks;
-    std::cout << static_cast<int>(led_section_size) << "\n";
     return true;
 }
 
