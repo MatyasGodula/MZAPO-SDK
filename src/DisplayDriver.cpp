@@ -22,7 +22,7 @@ DisplayDriver::DisplayDriver(DisplayOrientation orientation) : orientation(orien
 }
 
 DisplayDriver::~DisplayDriver() {
-    // No need to do anything here
+    std::cout << "DisplayDriver ending!..." << std::endl;
 }
 
 inline std::pair<int, int> DisplayDriver::map_coords(int x, int y) {

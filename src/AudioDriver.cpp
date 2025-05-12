@@ -33,6 +33,7 @@ AudioDriver::~AudioDriver() {
     stop_source.request_stop();
     // Added this line ^^ to try and prevent a potential deadlock.
     condvar.notify_one();
+    std::cout << "AudioDriver ending!..." << std::endl;
 }
 
 void AudioDriver::set_tone(uint32_t frequency_hz, uint32_t duty_pct) {

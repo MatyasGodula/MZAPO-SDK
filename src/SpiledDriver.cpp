@@ -18,6 +18,7 @@ SpiledDriver::SpiledDriver(void *spiled_mem_base):
 
 SpiledDriver::~SpiledDriver() {
     clear_led_line();
+    std::cout << "SpiledDriver ending!..." << std::endl;
 }
 
 bool SpiledDriver::init_led_line(uint8_t n_of_led_blocks) {

@@ -74,7 +74,7 @@ GameModule::GameModule(
 }
 
 GameModule::~GameModule() {
-    std::cout << "GameModule destroyed" << std::endl;
+    std::cout << "GameModule ending!..." << std::endl;
 }
 
 //---- Module Switching -----------------------------------------------------

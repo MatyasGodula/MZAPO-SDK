@@ -23,7 +23,7 @@ GameEndModule::GameEndModule(
     current_type(current_type_ptr) 
 {
     if (!screen || !buzzer || !spiled || !main_theme || !current_type) {
-        throw std::invalid_argument("Invalid argument passed to WinModule constructor");
+        throw std::invalid_argument("Invalid argument passed to GameEndModule constructor");
     }
 }
 

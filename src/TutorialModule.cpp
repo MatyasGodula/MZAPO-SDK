@@ -19,10 +19,14 @@ TutorialModule::TutorialModule(
     spiled(spiled_ptr), 
     main_theme(main_theme_ptr),
     current_type(current_type_ptr)
-{}
+{
+    if (!screen || !buzzer || !spiled || !main_theme || !current_type) {
+        throw std::invalid_argument("Null pointer passed to TutorialModule constructor.");
+    }
+}
 
 TutorialModule::~TutorialModule() {
-    // Nothing to do here
+    std::cout << "Tutorial module ending!..." << std::endl;
 }
 
 void TutorialModule::switch_setup() {
