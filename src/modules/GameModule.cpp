@@ -291,7 +291,6 @@ bool GameModule::handle_entity_collisions(Entity &shot) {
 }
 
 void GameModule::reset_game() {
-    // reset positions and counters
     int turret_y = SCREEN_HEIGHT - base.height - 5;
     turret_x = (SCREEN_WIDTH - base.width) / 2;
 
@@ -300,11 +299,37 @@ void GameModule::reset_game() {
     alien_direction = 1;
 
     shots.clear();
+
     turret_lives = 4;
 
-    // respawn entities and shields
-    update();  // reuse constructor logic for setup
+    entities = {
+        {turret_x, turret_y, &base},
+        {20, 80, &inv_a},
+        {60, 80, &inv_a},
+        {100, 80, &inv_a},
+        {140, 80, &inv_a},
+        {180, 80, &inv_a},
+        {220, 80, &inv_a},
+        {260, 80, &inv_a},
+        {20, 130, &inv_b},
+        {60, 130, &inv_b},
+        {100, 130, &inv_b},
+        {140, 130, &inv_b},
+        {180, 130, &inv_b},
+        {220, 130, &inv_b},
+        {260, 130, &inv_b},
+        {20, 180, &inv_c, true},
+        {60, 180, &inv_c, true},
+        {100, 180, &inv_c, true},
+        {140, 180, &inv_c, true},
+        {180, 180, &inv_c, true},
+        {220, 180, &inv_c, true},
+        {260, 180, &inv_c, true},
+    };
 
-    shield_1.reset_shield(); shield_2.reset_shield();
-    shield_3.reset_shield(); shield_4.reset_shield();
+    shield_1.reset_shield();
+    shield_2.reset_shield();
+    shield_3.reset_shield();
+    shield_4.reset_shield();
 }
+
