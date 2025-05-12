@@ -67,7 +67,7 @@ void GameEndModule::redraw() {
     screen->draw_text(
         GameEndModuleConstants::Selections::selection_x_pos + 10, 
         vertical_index - GameEndModuleConstants::Selections::selection_height + 8,       
-        FontType::WinFreeSystem14x16, 
+        main_theme->font, 
         text,
         main_theme->text
     );
@@ -85,7 +85,7 @@ void GameEndModule::redraw() {
         screen->draw_text(
             GameEndModuleConstants::Selections::selection_x_pos + 10, 
             vertical_index + 8,
-            FontType::WinFreeSystem14x16, 
+            main_theme->font, 
             selection_name, 
             main_theme->text
         );

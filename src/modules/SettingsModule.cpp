@@ -56,7 +56,7 @@ void SettingsModule::redraw() {
         screen->draw_text(
             10, 
             vertical_index + 8, 
-            FontType::WinFreeSystem14x16, 
+            main_theme->font, 
             theme_name,
             main_theme->text
         );

@@ -61,7 +61,7 @@ void MenuModule::redraw() {
     screen->draw_text(
         MenuConstants::selection_pos_x + 10,
         vertical_index - MenuConstants::selection_height + 8,
-        FontType::WinFreeSystem14x16, 
+        main_theme->font, 
         "SPACE INVADERS", 
         main_theme->text
     );
@@ -78,7 +78,7 @@ void MenuModule::redraw() {
         screen->draw_text(
             MenuConstants::selection_pos_x + 10, 
             vertical_index + 8,
-            FontType::WinFreeSystem14x16, 
+            main_theme->font, 
             selection_name, 
             main_theme->text
         );

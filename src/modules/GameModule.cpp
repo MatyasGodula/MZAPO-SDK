@@ -133,7 +133,13 @@ void GameModule::redraw() {
 
     // display score
     std::string score = "Score: " + std::to_string(destroyed_aliens_nbr * 100);
-    screen->draw_text(10, 10, FontType::WinFreeSystem14x16, score, main_theme->text);
+    screen->draw_text(
+        10, 
+        10, 
+        main_theme->font, 
+        score, 
+        main_theme->text
+    );
 
     // render shields
     for (auto &[shield, ent] : shields) {

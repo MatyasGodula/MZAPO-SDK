@@ -81,6 +81,12 @@ Fun fact, you can scroll on this page\nusing the Green knob, try it!\n\n\
 Good job! :)\
 ";
     screen->fill_screen(main_theme->background);
-    screen->draw_text(0, text_position, FontType::WinFreeSystem14x16, text, main_theme->text);
+    screen->draw_text(
+        0, 
+        text_position, 
+        main_theme->font, 
+        text, 
+        main_theme->text
+    );
     screen->flush();
 }

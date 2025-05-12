@@ -10,6 +10,8 @@
 
 #include "include/core/Color.hpp"
 
+#include "include/drivers/DisplayDriver.hpp" // For fonts
+
 #include <string_view>
 
 struct Theme {
@@ -19,6 +21,7 @@ struct Theme {
     Color shield;
     Color aliens;
     Color selection;
+    FontType font;
 };
 
 constexpr Theme DefaultTheme = {
@@ -28,6 +31,7 @@ constexpr Theme DefaultTheme = {
     .shield = Color::Green,
     .aliens = Color::White,
     .selection = Color::Green,
+    .font = FontType::WinFreeSystem14x16,
 };
 
 constexpr Theme LightTheme = {
@@ -37,6 +41,7 @@ constexpr Theme LightTheme = {
     .shield = Color::Blue,
     .aliens = Color::Black,
     .selection = Color::Magenta,
+    .font = FontType::WinFreeSystem14x16,
 };
 
 constexpr Theme Gruvbox = {
@@ -46,6 +51,7 @@ constexpr Theme Gruvbox = {
     .shield = Color(69, 133, 136), // Teal
     .aliens = Color::Red,
     .selection = Color(215, 153, 33), // Yellowish-Gold
+    .font = FontType::WinFreeSystem14x16,
 };
 
 constexpr Theme Solarized = {
@@ -55,6 +61,7 @@ constexpr Theme Solarized = {
     .shield = Color(133, 153, 0),    // Olive Green
     .aliens = Color(220, 50, 47),    // Red
     .selection = Color(133, 153, 0), // Olive Green
+    .font = FontType::ROM8x16,
 };
 
 constexpr Theme Ayu = {
@@ -64,6 +71,7 @@ constexpr Theme Ayu = {
     .shield = Color(114, 217, 211),    // #72d9d3
     .aliens = Color(255, 135, 162),    // #ff87a2
     .selection = Color(144, 222, 241), // #90def1
+    .font = FontType::WinFreeSystem14x16,
 };
 
 constexpr Theme Monokai = {
@@ -73,6 +81,7 @@ constexpr Theme Monokai = {
     .shield = Color(166, 226, 46),    // #a6e22e
     .aliens = Color(249, 38, 114),    // #f92672 (pink/red)
     .selection = Color(249, 38, 114), // #f92672
+    .font = FontType::ROM8x16,
 };
 
 constexpr Theme ThemeList[] = {
