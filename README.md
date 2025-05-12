@@ -31,10 +31,23 @@ This project implements a Space Invaders clone and a modular driver-based SDK su
 ## Build Instructions
 
 ### Prerequsities
-- ARM cross-compiler ('arm-linux-gnueabihf-gcc' and 'g++')
-    - compiler needs to be compatible with c++23 and c99 features
+An ARM cross-compiler ('arm-linux-gnueabihf-gcc' and 'g++')
+ - compiler needs to be compatible with c++23 and c99 features
+
+Need to have a private `mzapo-root-key`, this key can be copied using
+```bash
+scp cvut_login@postel.felk.cvut.cz:/opt/zynq/ssh-connect/mzapo-root-key ~/.ssh/
+chmod 600 ~/.ssh/mzapo-root-key
+```
+
+Once the kay is copied ot your PC you can then connect to the board using
+```bash
+ssh -i ~/.ssh/mzapo-root-key -o 'ProxyJump=cvut_login@postel.felk.cvut.cz' root@192.168.223.xxx
+```
 
 ### Build and Deploy
+
+Run
 ```bash
 make run TARGET_IP=192.168.xxx.xxx
 ```
@@ -42,6 +55,11 @@ make run TARGET_IP=192.168.xxx.xxx
 To run with debug
 ```bash
 make debug TARGET_IP=192.168.xxx.xxx
+```
+
+Automatic connection to the board requires the previously defined private SSH key
+```bash
+ssh-add /opt/apo/zynq/ssh-connect/mzapo-root-key
 ```
 
 
