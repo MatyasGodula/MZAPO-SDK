@@ -16,7 +16,6 @@
 
 #include "include/modules/Module.hpp"
 
-
 constexpr int selection_height = 32;
 
 /// @brief SettingsModule class for handling the settings screen.

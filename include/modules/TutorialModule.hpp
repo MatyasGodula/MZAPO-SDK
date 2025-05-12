@@ -16,7 +16,6 @@
 
 #include "include/modules/Module.hpp"
 
-
 namespace Constants {
     namespace Text {
         constexpr int vertical_limit_pos = 0;

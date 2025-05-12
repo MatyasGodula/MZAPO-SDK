@@ -6,6 +6,8 @@
 /// @author Matyas Godula
 /// @date 8.5.2025
 
+#pragma once
+
 #include "include/core/Theme.hpp"
 
 #include "include/drivers/AudioDriver.hpp"
@@ -13,7 +15,6 @@
 #include "include/drivers/SpiledDriver.hpp"
 
 #include "include/modules/Module.hpp"
-
 
 /// @brief GameEndModule class for handling the current end state of the game.
 enum class GameEndState {
