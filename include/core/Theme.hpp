@@ -84,13 +84,24 @@ constexpr Theme Monokai = {
     .font = FontType::ROM8x16,
 };
 
+constexpr Theme HotDogStand = {
+    .background = Color::Red,
+    .text = Color::Yellow,
+    .turret = Color::Black,
+    .shield = Color::Yellow,
+    .aliens = Color::Black,
+    .selection = Color::Black,
+    .font = FontType::ROM8x16,
+};
+
 constexpr Theme ThemeList[] = {
     DefaultTheme, 
     LightTheme, 
     Gruvbox, 
     Solarized, 
     Ayu, 
-    Monokai
+    Monokai,
+    HotDogStand,
 };
 
 constexpr std::string_view ThemeNames[] = {
@@ -99,7 +110,8 @@ constexpr std::string_view ThemeNames[] = {
     "Gruvbox",                                 
     "Solarized", 
     "Ayu",   
-    "Monokai"
+    "Monokai",
+    "HotDogStand"
 };
 
 constexpr int ThemeCount = sizeof(ThemeList) / sizeof(Theme);
