@@ -3,22 +3,25 @@
 
 #pragma once
 
+#include "include/core/Entity.hpp"
+#include "include/core/Theme.hpp"
+
+#include "include/drivers/AudioDriver.hpp"
+#include "include/drivers/DisplayDriver.hpp"
+#include "include/drivers/SpiledDriver.hpp"
+
+#include "include/modules/Module.hpp"
+
+#include "include/sprites/AlienShotSprite.hpp"
+#include "include/sprites/AlienSprites.hpp"
+#include "include/sprites/BaseSprite.hpp"
+#include "include/sprites/BlankSprite.hpp"
+#include "include/sprites/ShieldSprite.hpp"
+#include "include/sprites/TurretShotSprite.hpp"
+
 #include <ctime>
 #include <utility>
 #include <vector>
-
-#include "include/AlienShotSprite.hpp"
-#include "include/AlienSprites.hpp"
-#include "include/AudioDriver.hpp"
-#include "include/BaseSprite.hpp"
-#include "include/BlankSprite.hpp"
-#include "include/DisplayDriver.hpp"
-#include "include/Entity.hpp"
-#include "include/Module.hpp"
-#include "include/ShieldSprite.hpp"
-#include "include/SpiledDriver.hpp"
-#include "include/Theme.hpp"
-#include "include/TurretShotSprite.hpp"
 
 /// @brief GameModule class for core game logic and handling gameplay.
 /// @details This class manages game state, updates, rendering, and user input during gameplay.

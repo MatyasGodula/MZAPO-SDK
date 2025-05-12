@@ -8,9 +8,9 @@ This project implements a Space Invaders clone and a modular driver-based SDK su
 
 - Modular architecture with trait-based `Module` interface
 - Custom heapless hardware drivers:
-    - `DisplayDriver` with screen rotation and double-buffering
-    - `AudioDriver` with non-blocking jthread tone control
-    - `SpiledDriver` for RGB knob and LED bar control
+  - `DisplayDriver` with screen rotation and double-buffering
+  - `AudioDriver` with non-blocking jthread tone control
+  - `SpiledDriver` for RGB knob and LED bar control
 - Menu, Settings, Tutorial, and Game states
 - Theme system with predefined famous themes
 - Font rendering and sprite system
@@ -20,7 +20,13 @@ This project implements a Space Invaders clone and a modular driver-based SDK su
 ## Project Structure
 
 - `include/` – Public headers
+  - `core/` - Core data types
+  - `drivers/` - `Hardware drivers` for the MZ-APO board
+  - `modules/` - Modules for the `Module` system
+  - `sprites/` - Bitmaps for different `sprites`
 - `src/` – Source code for drivers and modules
+  - `drivers/` - `Hardware driver` implementations
+  - `modules/` - `Module` implementation
 - `third_party/` – Provided hardware-related `.c/.h` files
 - `assets/` – Fonts
 - `docs/` – Architecture diagrams and supporting docs
@@ -77,15 +83,15 @@ This project was designed as a reusable SDK for apps on the MZ-APO board
 - A shared `Module` trait interface
 - Hardware interaction is encapsulated in reusable drivers
 - Every module implements 
-    - `redraw()` to draw data on the screen
-    - `update()` to take inputs and update the state of the current Module
-    - `switch_setup()` to set up all important module data eg. change the display orientation
-    - `switch_to(StateFlag)` which changes the module to another one or signals info to the main loop
+  - `redraw()` to draw data on the screen
+  - `update()` to take inputs and update the state of the current Module
+  - `switch_setup()` to set up all important module data eg. change the display orientation
+  - `switch_to(StateFlag)` which changes the module to another one or signals info to the main loop
 - You can extend this project with any Module/s, for example:
-    - Add a custom keybord and a code editor or an e-reader (DisplayDriver supports newlines!)
-    - Multiple games (gameboy-like)
-    - A calculator, logic puzzle or even a mini-shell
-    - Doom (of course) or Tetris
+  - Add a custom keybord and a code editor or an e-reader (DisplayDriver supports newlines!)
+  - Multiple games (gameboy-like)
+  - A calculator, logic puzzle or even a mini-shell
+  - Doom (of course) or Tetris
 - For more info about the architecture implementation for SPACE INVADERS see `docs/SPACE_INVADERS_diagram.svg`
 
 

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "include/Color.hpp"
+#include "include/core/Color.hpp"
 
 #include <string_view>
 

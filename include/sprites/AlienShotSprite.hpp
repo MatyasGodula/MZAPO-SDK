@@ -2,7 +2,7 @@
 // Copyright (c) 2025 Albert Bastl
 
 #pragma once
-#include "include/Sprite.hpp"
+#include "include/sprites/Sprite.hpp"
 
 class AlienShotSprite : public Sprite {
     private:

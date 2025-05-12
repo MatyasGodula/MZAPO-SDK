@@ -8,18 +8,20 @@
 /// @note For some reason copilot has gotten really good at generating comments and docs.
 
 #pragma once
-#include <cstdint>
-#include <string_view>
-#include <utility>
 
-#include "include/Color.hpp"
-#include "include/Sprite.hpp"
+#include "include/core/Color.hpp"
+
+#include "include/sprites/Sprite.hpp"
 
 #include "third_party/mzapo/mzapo_parlcd.h"
 #include "third_party/mzapo/mzapo_phys.h"
 #include "third_party/mzapo/mzapo_regs.h"
 
 #include "assets/fonts/font_types.h"
+
+#include <cstdint>
+#include <string_view>
+#include <utility>
 
 /// @brief FontType enum for different font types.
 /// @details This enum is used to specify the font type when drawing text on the display.

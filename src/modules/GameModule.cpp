@@ -1,19 +1,21 @@
-#include "include/GameModule.hpp"
+#include "include/modules/GameModule.hpp"
+
+#include "include/core/Theme.hpp"
+#include "include/core/Entity.hpp"
+
+#include "include/drivers/DisplayDriver.hpp"
+#include "include/drivers/AudioDriver.hpp"
+#include "include/drivers/SpiledDriver.hpp"
+
+#include "include/sprites/AlienSprites.hpp"
+#include "include/sprites/TurretShotSprite.hpp"
+#include "include/sprites/AlienShotSprite.hpp"
+#include "include/sprites/ShieldSprite.hpp"
+#include "include/sprites/BaseSprite.hpp"
 
 #include "third_party/mzapo/mzapo_parlcd.h"  // parlcd hardware
 #include "third_party/mzapo/mzapo_phys.h"    // physical memory mappings
 #include "third_party/mzapo/mzapo_regs.h"    // register definitions
-
-#include "include/DisplayDriver.hpp"
-#include "include/AudioDriver.hpp"
-#include "include/SpiledDriver.hpp"
-#include "include/Theme.hpp"
-#include "include/AlienSprites.hpp"
-#include "include/TurretShotSprite.hpp"
-#include "include/AlienShotSprite.hpp"
-#include "include/ShieldSprite.hpp"
-#include "include/BaseSprite.hpp"
-#include "include/Entity.hpp"
 
 #include <algorithm>
 #include <random>

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "include/Sprite.hpp"
+#include "include/sprites/Sprite.hpp"
 
 class InvaderA : public Sprite {
     private:

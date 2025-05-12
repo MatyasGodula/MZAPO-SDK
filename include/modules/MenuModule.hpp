@@ -8,11 +8,13 @@
 
 #pragma once
 
-#include "include/AudioDriver.hpp"
-#include "include/DisplayDriver.hpp"
-#include "include/Module.hpp"
-#include "include/SpiledDriver.hpp"
-#include "include/Theme.hpp"
+#include "include/core/Theme.hpp"
+
+#include "include/drivers/AudioDriver.hpp"
+#include "include/drivers/DisplayDriver.hpp"
+#include "include/drivers/SpiledDriver.hpp"
+
+#include "include/modules/Module.hpp"
 
 namespace MenuConstants {
     constexpr int selection_height = 32;

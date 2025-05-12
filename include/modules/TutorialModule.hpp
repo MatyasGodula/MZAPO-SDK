@@ -6,11 +6,16 @@
 /// @author Matyas Godula
 /// @date 5.5.2025
 
-#include "include/AudioDriver.hpp"
-#include "include/DisplayDriver.hpp"
-#include "include/Module.hpp"
-#include "include/SpiledDriver.hpp"
-#include "include/Theme.hpp"
+#pragma once
+
+#include "include/core/Theme.hpp"
+
+#include "include/drivers/AudioDriver.hpp"
+#include "include/drivers/DisplayDriver.hpp"
+#include "include/drivers/SpiledDriver.hpp"
+
+#include "include/modules/Module.hpp"
+
 
 namespace Constants {
     namespace Text {

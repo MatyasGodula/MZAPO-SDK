@@ -1,9 +1,12 @@
-#include "include/MenuModule.hpp"
-#include "include/AudioDriver.hpp"
-#include "include/DisplayDriver.hpp"
-#include "include/Module.hpp"
-#include "include/SpiledDriver.hpp"
-#include "include/Theme.hpp"
+#include "include/modules/MenuModule.hpp"
+
+#include "include/core/Theme.hpp"
+
+#include "include/drivers/AudioDriver.hpp"
+#include "include/drivers/DisplayDriver.hpp"
+#include "include/drivers/SpiledDriver.hpp"
+
+#include "include/modules/Module.hpp"
 
 #include <iostream>
 #include <stdexcept>

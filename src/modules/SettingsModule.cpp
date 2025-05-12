@@ -1,9 +1,11 @@
-#include "include/SettingsModule.hpp"
-#include "include/AudioDriver.hpp"
-#include "include/Color.hpp"
-#include "include/DisplayDriver.hpp"
-#include "include/SpiledDriver.hpp"
-#include "include/Theme.hpp"
+#include "include/modules/SettingsModule.hpp"
+
+#include "include/core/Color.hpp"
+#include "include/core/Theme.hpp"
+
+#include "include/drivers/AudioDriver.hpp"
+#include "include/drivers/DisplayDriver.hpp"
+#include "include/drivers/SpiledDriver.hpp"
 
 #include <iostream>
 #include <stdexcept>
