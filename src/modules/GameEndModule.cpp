@@ -35,7 +35,7 @@ GameEndModule::~GameEndModule() {
 }
 
 void GameEndModule::update() {
-    if (spiled->read_knob_press(KnobColor::Blue)) {
+    if (spiled->read_knob_press(KnobColor::Green)) {
         switch_to(GameEndModuleConstants::Selections::selection_types[selection]);
         return;
     }

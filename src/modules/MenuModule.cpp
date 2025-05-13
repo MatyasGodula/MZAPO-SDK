@@ -35,7 +35,7 @@ MenuModule::~MenuModule() {
 }
 
 void MenuModule::update() {
-    if (spiled->read_knob_press(KnobColor::Blue)) {
+    if (spiled->read_knob_press(KnobColor::Green)) {
         switch_to(MenuModuleTypes::SelectionTypes[selection]);
         return;
     }
