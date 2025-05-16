@@ -41,15 +41,13 @@ void MenuModule::update() {
     }
     int selected_copy = selection;
     int delta = spiled->read_knob_change(KnobColor::Green);
-    if (delta > 2) {
-        selection++;
-    } else if (delta < -2) {
-        selection--;
+    aretation += delta;
+    if (aretation >= static_cast<int>(MenuModuleTypes::SelectionCount * MenuConstants::selection_aretation)) {
+        aretation = static_cast<int>(MenuModuleTypes::SelectionCount * MenuConstants::selection_aretation) - 1;
+    } else if (aretation < 0) {
+        aretation = 0;
     }
-    if (selection < 0)
-        selection = 0;
-    if (selection >= MenuModuleTypes::SelectionCount)
-        selection = MenuModuleTypes::SelectionCount - 1;
+    selection = aretation / MenuConstants::selection_aretation;
     if (selected_copy != selection) {
         buzzer->play_tone(Tone::Selection, 100);
     }
@@ -86,7 +84,7 @@ void MenuModule::redraw() {
     }
 
     screen->flush();
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    //std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
 void MenuModule::switch_setup() {

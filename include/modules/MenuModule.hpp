@@ -21,6 +21,8 @@ namespace MenuConstants {
     constexpr int selection_width = 100;
     constexpr int selection_pos_x = 50;
     constexpr int selection_pos_y = 82; // change later
+
+    constexpr int selection_aretation = 4;
 } // namespace MenuConstants
 
 namespace MenuModuleTypes {
@@ -69,6 +71,7 @@ class MenuModule : public Module {
         void switch_to(StateFlag new_mod) override;
 
     private:
+        int aretation = 0; 
         int selection = 0;
         DisplayDriver *const screen;
         AudioDriver *const buzzer;

@@ -18,6 +18,8 @@
 
 constexpr int selection_height = 32;
 
+constexpr int selection_aretation = 4;
+
 /// @brief SettingsModule class for handling the settings screen.
 /// @details This class is responsible for displaying the settings screen and handling user input.
 /// @note The settings screen allows the user to change the theme.
@@ -45,6 +47,7 @@ class SettingsModule : public Module {
         void switch_to(StateFlag new_mod) override;
 
     private:
+        int aretation = 0; 
         int setting_selected = 0;
         DisplayDriver *const screen;
         AudioDriver *const buzzer;

@@ -79,17 +79,16 @@ void SettingsModule::update() {
     }
     int selected_copy = setting_selected;
     int delta = spiled->read_knob_change(KnobColor::Green);
-    if (delta > 2) {
-        setting_selected++;
-    } else if (delta < -2) {
-        setting_selected--;
+    aretation += delta;
+    //std::cout << delta << "\n";
+    if (aretation >= static_cast<int>(ThemeCount * selection_aretation)) {
+        aretation = (static_cast<int>(ThemeCount * selection_aretation) - 1);
+        aretation = aretation - aretation % selection_aretation;
+        std::cout << aretation << "\n";
+    } else if (aretation < 0) {
+        aretation = 0;
     }
-    if (setting_selected < 0) {
-        setting_selected = 0;
-    }
-    if (setting_selected >= ThemeCount) {
-        setting_selected = ThemeCount - 1;
-    }
+    setting_selected = aretation / selection_aretation;
     if (selected_copy != setting_selected) {
         buzzer->play_tone(Tone::Selection, 100);
     }

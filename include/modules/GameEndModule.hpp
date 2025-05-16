@@ -41,6 +41,8 @@ namespace GameEndModuleConstants {
         };
 
         constexpr int selection_count = sizeof(selections) / sizeof(selections[0]);
+
+        constexpr int selection_aretation = 4;
     } // namespace Selections
 } // namespace GameEndModuleConstants
 
@@ -82,6 +84,7 @@ class GameEndModule : public Module {
 
     private:
         GameEndState game_end_state = GameEndState::Ongoing;
+        int aretation = 0; 
         int selection = 0;
         DisplayDriver *screen;
         AudioDriver *buzzer;
