@@ -40,14 +40,21 @@ void MenuModule::update() {
         return;
     }
     int selected_copy = selection;
-    int delta = spiled->read_knob_change(KnobColor::Green);
+    delta = spiled->read_knob_change(KnobColor::Green);
     aretation += delta;
-    if (aretation >= static_cast<int>(MenuModuleTypes::SelectionCount * MenuConstants::selection_aretation)) {
-        aretation = static_cast<int>(MenuModuleTypes::SelectionCount * MenuConstants::selection_aretation) - 1;
-    } else if (aretation < 0) {
-        aretation = 0;
+    if (aretation <= (- MenuConstants::selection_aretation)) {
+        selection += aretation / MenuConstants::selection_aretation;
+        aretation = aretation % MenuConstants::selection_aretation;
+    } else if (aretation >= MenuConstants::selection_aretation) {
+        selection += aretation / MenuConstants::selection_aretation;
+        aretation = aretation % MenuConstants::selection_aretation;
     }
-    selection = aretation / MenuConstants::selection_aretation;
+
+    if (selection >= static_cast<int>(MenuModuleTypes::SelectionCount)) {
+        selection = static_cast<int>(MenuModuleTypes::SelectionCount) - 1;
+    } else if (selection < 0) {
+        selection = 0;
+    }
     if (selected_copy != selection) {
         buzzer->play_tone(Tone::Selection, 100);
     }

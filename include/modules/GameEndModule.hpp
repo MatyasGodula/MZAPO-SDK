@@ -84,6 +84,7 @@ class GameEndModule : public Module {
 
     private:
         GameEndState game_end_state = GameEndState::Ongoing;
+        int delta = 0;
         int aretation = 0; 
         int selection = 0;
         DisplayDriver *screen;

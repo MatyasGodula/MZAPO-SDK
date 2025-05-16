@@ -40,15 +40,21 @@ void GameEndModule::update() {
         return;
     }
     int selected_copy = selection;
-    int delta = spiled->read_knob_change(KnobColor::Green);
+    delta = spiled->read_knob_change(KnobColor::Green);
     aretation += delta;
-    // INTEGER GETS PROMOTED TO SIZE_T !!!!! we need to prevent that from happening
-    if (aretation >= static_cast<int>(GameEndModuleConstants::Selections::selection_count * GameEndModuleConstants::Selections::selection_aretation)) {
-        aretation = static_cast<int>(GameEndModuleConstants::Selections::selection_count * GameEndModuleConstants::Selections::selection_aretation - 1);
-    } else if (aretation < 0) {
-        aretation = 0;
+    if (aretation <= (- GameEndModuleConstants::Selections::selection_aretation)) {
+        selection += aretation / GameEndModuleConstants::Selections::selection_aretation;
+        aretation = aretation % GameEndModuleConstants::Selections::selection_aretation;
+    } else if (aretation >= GameEndModuleConstants::Selections::selection_aretation) {
+        selection += aretation / GameEndModuleConstants::Selections::selection_aretation;
+        aretation = aretation % GameEndModuleConstants::Selections::selection_aretation;
     }
-    selection = aretation / GameEndModuleConstants::Selections::selection_aretation;
+
+    if (selection >= static_cast<int>(GameEndModuleConstants::Selections::selection_count)) {
+        selection = static_cast<int>(GameEndModuleConstants::Selections::selection_count) - 1;
+    } else if (selection < 0) {
+        selection = 0;
+    }
     if (selected_copy != selection) {
         buzzer->play_tone(Tone::Selection, 100);
     }

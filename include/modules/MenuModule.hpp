@@ -71,6 +71,7 @@ class MenuModule : public Module {
         void switch_to(StateFlag new_mod) override;
 
     private:
+        int delta = 0;
         int aretation = 0; 
         int selection = 0;
         DisplayDriver *const screen;
