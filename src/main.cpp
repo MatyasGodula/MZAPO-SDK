@@ -17,6 +17,7 @@
 #include "third_party/mzapo/mzapo_regs.h"
 
 #include <algorithm>
+#include <thread>
 #include <ctime>
 #include <iostream>
 #include <unistd.h>
@@ -85,6 +86,7 @@ int main() {
             case StateFlag::ResetGame:
                 game.reset_game();
                 game_end_screen.set_game_end_state(GameEndState::Ongoing);
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
                 current_module = &menu;
                 current_flag = StateFlag::Menu;
                 break;
