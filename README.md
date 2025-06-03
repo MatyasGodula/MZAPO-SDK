@@ -35,6 +35,10 @@ Designed with scalability in mind, this SDK can be easily extended to support ne
 - `LICENSE` – MIT license
 - `Makefile` – Cross-compilation and deployment rules
 
+**[Open Diagram (SVG)](docs/SPACE_INVADERS_diagram.svg)**
+
+![Architecture Diagram Preview](docs/SPACE_INVADERS_diagram.svg)
+
 
 ## Build Instructions
 
