@@ -9,8 +9,29 @@ LDFLAGS += -static
 LDLIBS += -lrt -lpthread
 #LDLIBS += -lm
 
-SOURCES = main.c mzapo_phys.c mzapo_parlcd.c serialize_lock.c
-SOURCES += font_prop14x16.c font_rom8x16.c
+SOURCES = \
+	src/main.cpp \
+	src/drivers/DisplayDriver.cpp \
+	src/drivers/AudioDriver.cpp \
+	src/drivers/SpiledDriver.cpp 
+
+SOURCES += \
+	src/modules/SettingsModule.cpp \
+	src/modules/MenuModule.cpp \
+	src/modules/GameModule.cpp \
+	src/modules/TutorialModule.cpp \
+	src/modules/GameEndModule.cpp
+
+SOURCES += \
+	third_party/mzapo/mzapo_phys.c \
+	third_party/mzapo/mzapo_parlcd.c \
+	third_party/serialize_lock.c
+
+SOURCES += \
+	assets/fonts/font_prop14x16.c \
+	assets/fonts/font_rom8x16.c
+
+
 TARGET_EXE = space_invaders
 #TARGET_IP ?= 192.168.202.104
 ifeq ($(TARGET_IP),)

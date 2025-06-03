@@ -2,4 +2,5 @@
 depend
 space_invaders
 connect.gdb
-
+.vscode
+.clang-format
