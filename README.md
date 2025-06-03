@@ -107,4 +107,4 @@ This project is licensed under the MIT License. See LICENSE for full terms.
 
 ## Important Note
 
-If you are currently enrolled in the APO course at CTU FEE, please consult with your instructors before using or copying any part of this repository.The evaluation system may flag such usage as plagiarism, even if your intent is educational.
+If you are currently enrolled in the APO course at CTU FEE, please consult with your instructors before using or copying any part of this repository. The evaluation system may flag such usage as plagiarism, even if your intent is educational.
