@@ -25,11 +25,6 @@
 
 #define _POSIX_C_SOURCE 200112L
 
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 480
-
-#define TURRET_POS 0
-
 int main() {
     DisplayDriver screen(DisplayOrientation::Portrait);
     screen.fill_screen(Color::Black);
