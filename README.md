@@ -35,14 +35,10 @@ Designed with scalability in mind, this SDK can be easily extended to support ne
 - `LICENSE` – MIT license
 - `Makefile` – Cross-compilation and deployment rules
 
-**[Open Diagram (SVG)](docs/SPACE_INVADERS_diagram.svg)**
-
-![Architecture Diagram Preview](docs/SPACE_INVADERS_diagram.svg)
-
 
 ## Build Instructions
 
-### Prerequsities
+### Prerequisities
 An ARM cross-compiler ('arm-linux-gnueabihf-gcc' and 'g++')
  - compiler needs to be compatible with c++23 and c99 features
 
@@ -52,7 +48,7 @@ scp cvut_login@postel.felk.cvut.cz:/opt/zynq/ssh-connect/mzapo-root-key ~/.ssh/
 chmod 600 ~/.ssh/mzapo-root-key
 ```
 
-Once the kay is copied ot your PC you can then connect to the board using
+Once the key is copied ot your PC you can then connect to the board using
 ```bash
 ssh -i ~/.ssh/mzapo-root-key -o 'ProxyJump=cvut_login@postel.felk.cvut.cz' root@192.168.223.xxx
 ```
@@ -80,7 +76,7 @@ ssh-add /opt/apo/zynq/ssh-connect/mzapo-root-key
 - Green knob: navigate menus / move turret
 - Blue knob: shoot / select choice
 - Red knob: return
-(input implemented through the SPILED driver)
+(Input implemented through the SPILED driver)
 
 
 ## Architectural Overview
@@ -94,11 +90,15 @@ This project was designed as a reusable SDK for apps on the MZ-APO board
   - `switch_setup()` to set up all important module data eg. change the display orientation
   - `switch_to(StateFlag)` which changes the module to another one or signals info to the main loop
 - You can extend this project with any Module/s, for example:
-  - Add a custom keybord and a code editor or an e-reader (DisplayDriver supports newlines!)
+  - Add a custom keyboard and a code editor or an e-reader (DisplayDriver supports newlines!)
   - Multiple games (gameboy-like)
   - A calculator, logic puzzle or even a mini-shell
   - Doom (of course) or Tetris
 - For more info about the architecture implementation for SPACE INVADERS see `docs/SPACE_INVADERS_diagram.svg`
+
+**[Open Diagram (SVG)](docs/SPACE_INVADERS_diagram.svg)**
+
+![Architecture Diagram Preview](docs/SPACE_INVADERS_diagram.svg)
 
 
 ## Authors
@@ -111,6 +111,9 @@ This project was designed as a reusable SDK for apps on the MZ-APO board
 
 This project is licensed under the MIT License. See LICENSE for full terms.
 
-## Important Note
+
+## Important Notes
 
 If you are currently enrolled in the APO course at CTU FEE, please consult with your instructors before using or copying any part of this repository. The evaluation system may flag such usage as plagiarism, even if your intent is educational.
+
+I originally developed this project on GitLab, where it was reviewed by my instructor, [Karel Koci](https://github.com/Cynerd). Due to a botched migration, the original GitLab history (including merge approvals) isn't reflected here. Apologies for the incomplete attribution — and thank you for the feedback!
