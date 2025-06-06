@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include "include/core/Entity.hpp"
-#include "include/core/Theme.hpp"
+#include "include/utils/Theme.hpp"
 
 #include "include/drivers/AudioDriver.hpp"
 #include "include/drivers/DisplayDriver.hpp"
@@ -12,12 +11,14 @@
 
 #include "include/modules/Module.hpp"
 
-#include "include/sprites/AlienShotSprite.hpp"
-#include "include/sprites/AlienSprites.hpp"
-#include "include/sprites/BaseSprite.hpp"
-#include "include/sprites/BlankSprite.hpp"
-#include "include/sprites/ShieldSprite.hpp"
-#include "include/sprites/TurretShotSprite.hpp"
+#include "app_space_invaders/internal/utils/Entity.hpp"
+
+#include "app_space_invaders/assets/sprites/AlienShotSprite.hpp"
+#include "app_space_invaders/assets/sprites/AlienSprites.hpp"
+#include "app_space_invaders/assets/sprites/BaseSprite.hpp"
+#include "app_space_invaders/assets/sprites/BlankSprite.hpp"
+#include "app_space_invaders/assets/sprites/ShieldSprite.hpp"
+#include "app_space_invaders/assets/sprites/TurretShotSprite.hpp"
 
 #include <ctime>
 #include <utility>

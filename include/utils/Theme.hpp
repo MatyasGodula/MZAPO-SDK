@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "include/core/Color.hpp"
+#include "include/utils/Color.hpp"
 
 #include "include/drivers/DisplayDriver.hpp" // For fonts
 

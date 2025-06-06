@@ -1,17 +1,17 @@
-#include "include/modules/GameModule.hpp"
+#include "app_space_invaders/include/modules/GameModule.hpp"
 
-#include "include/core/Theme.hpp"
-#include "include/core/Entity.hpp"
+#include "include/utils/Theme.hpp"
+#include "app_space_invaders/internal/utils/Entity.hpp"
 
 #include "include/drivers/DisplayDriver.hpp"
 #include "include/drivers/AudioDriver.hpp"
 #include "include/drivers/SpiledDriver.hpp"
 
-#include "include/sprites/AlienSprites.hpp"
-#include "include/sprites/TurretShotSprite.hpp"
-#include "include/sprites/AlienShotSprite.hpp"
-#include "include/sprites/ShieldSprite.hpp"
-#include "include/sprites/BaseSprite.hpp"
+#include "app_space_invaders/assets/sprites/AlienSprites.hpp"
+#include "app_space_invaders/assets/sprites/TurretShotSprite.hpp"
+#include "app_space_invaders/assets/sprites/AlienShotSprite.hpp"
+#include "app_space_invaders/assets/sprites/ShieldSprite.hpp"
+#include "app_space_invaders/assets/sprites/BaseSprite.hpp"
 
 #include "third_party/mzapo/mzapo_parlcd.h"  // parlcd hardware
 #include "third_party/mzapo/mzapo_phys.h"    // physical memory mappings

@@ -1,7 +1,7 @@
-#include "include/modules/SettingsModule.hpp"
+#include "internal/modules/SettingsModule.hpp"
 
-#include "include/core/Color.hpp"
-#include "include/core/Theme.hpp"
+#include "include/utils/Color.hpp"
+#include "include/utils/Theme.hpp"
 
 #include "include/drivers/AudioDriver.hpp"
 #include "include/drivers/DisplayDriver.hpp"

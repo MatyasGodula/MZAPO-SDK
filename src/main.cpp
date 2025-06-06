@@ -5,12 +5,14 @@
 #include "include/drivers/DisplayDriver.hpp"
 #include "include/drivers/SpiledDriver.hpp"
 
-#include "include/modules/GameModule.hpp"
-#include "include/modules/MenuModule.hpp"
+#include "app_space_invaders/include/app/GameModule.hpp"
+
 #include "include/modules/Module.hpp"
-#include "include/modules/SettingsModule.hpp"
-#include "include/modules/TutorialModule.hpp"
-#include "include/modules/GameEndModule.hpp"
+
+#include "internal/modules/MenuModule.hpp"
+#include "internal/modules/SettingsModule.hpp"
+#include "internal/modules/TutorialModule.hpp"
+#include "internal/modules/GameEndModule.hpp"
 
 #include "third_party/mzapo/mzapo_parlcd.h"
 #include "third_party/mzapo/mzapo_phys.h"

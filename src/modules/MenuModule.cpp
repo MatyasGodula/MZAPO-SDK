@@ -1,6 +1,6 @@
-#include "include/modules/MenuModule.hpp"
+#include "internal/modules/MenuModule.hpp"
 
-#include "include/core/Theme.hpp"
+#include "include/utils/Theme.hpp"
 
 #include "include/drivers/AudioDriver.hpp"
 #include "include/drivers/DisplayDriver.hpp"

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "include/core/Color.hpp"
+#include "include/utils/Color.hpp"
 
 #include "include/sprites/Sprite.hpp"
 

@@ -16,9 +16,11 @@ SOURCES = \
 	src/drivers/SpiledDriver.cpp 
 
 SOURCES += \
+	app_space_invaders/src/modules/GameModule.cpp
+
+SOURCES += \
 	src/modules/SettingsModule.cpp \
 	src/modules/MenuModule.cpp \
-	src/modules/GameModule.cpp \
 	src/modules/TutorialModule.cpp \
 	src/modules/GameEndModule.cpp
 

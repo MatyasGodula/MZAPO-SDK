@@ -20,15 +20,16 @@ Designed with scalability in mind, this SDK can be easily extended to support ne
 
 
 ## Project Structure
-
+- `app_space_invaders` - **Space Invaders** implementation
 - `include/` – Public headers
-  - `core/` - Core data types
-  - `drivers/` - `Hardware drivers` for the MZ-APO board
-  - `modules/` - Modules for the `Module` system
-  - `sprites/` - Bitmaps for different `sprites`
+  - `drivers/` - **Hardware drivers** for the MZ-APO board
+  - `modules/` - The **Module system** interface
+  - `utils/` - Data types and other utilities
+- `internal/` - Internal header files
+  - `modules` - Different SDK module implementations, eg. `SettingsModule.hpp` or `MenuModule.hpp`
 - `src/` – Source code for drivers and modules
-  - `drivers/` - `Hardware driver` implementations
-  - `modules/` - `Module` implementation
+  - `drivers/` - **Hardware driver** implementations
+  - `modules/` - **Modules** implementation
 - `third_party/` – Provided hardware-related `.c/.h` files
 - `assets/` – Fonts
 - `docs/` – Architecture diagrams and supporting docs
