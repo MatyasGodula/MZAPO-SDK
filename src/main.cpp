@@ -1,11 +1,11 @@
-#include "include/core/Color.hpp"
-#include "include/core/Theme.hpp"
+#include "include/utils/Color.hpp"
+#include "include/utils/Theme.hpp"
 
 #include "include/drivers/AudioDriver.hpp"
 #include "include/drivers/DisplayDriver.hpp"
 #include "include/drivers/SpiledDriver.hpp"
 
-#include "app_space_invaders/include/app/GameModule.hpp"
+#include "app_space_invaders/include/modules/GameModule.hpp"
 
 #include "include/modules/Module.hpp"
 
