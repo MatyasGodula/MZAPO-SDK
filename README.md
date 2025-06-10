@@ -71,6 +71,11 @@ Automatic connection to the board requires the previously defined private SSH ke
 ssh-add /opt/apo/zynq/ssh-connect/mzapo-root-key
 ```
 
+**If not on the MZ-APO board**
+```bash
+make
+```
+**Though without the board itself the code is not runnbale**
 
 ## Game Controls
 
